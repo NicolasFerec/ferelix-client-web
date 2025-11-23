@@ -1,0 +1,10 @@
+<template>
+  <div id="app" class="min-h-screen bg-gray-900">
+    <router-view />
+  </div>
+</template>
+
+<script setup>
+// App root component
+</script>
+
