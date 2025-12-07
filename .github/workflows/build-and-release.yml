@@ -45,13 +45,13 @@ jobs:
           name: pr-dist
           path: dist.zip
 
-      # --- Logic: create latest release ---
-      - name: Create/Update latest release
+      # --- Logic: create rolling release ---
+      - name: Create/Update rolling release
         if: github.ref == 'refs/heads/main'
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: latest
-          name: Latest main build
+          tag_name: rolling
+          name: Main build
           prerelease: true
           files: dist.zip
         env:
