@@ -2,16 +2,18 @@
   <div class="video-player w-full">
     <video
       ref="videoElement"
-      class="w-full h-auto"
+      :src="videoSrc"
+      class="w-full h-auto max-h-[80vh]"
       controls
       playsinline
+      preload="auto"
+      @error="onError"
     ></video>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, computed } from 'vue'
-import Hls from 'hls.js'
+import { ref, watch, onMounted, nextTick } from 'vue'
 import { getAccessToken } from '@/api/client'
 
 const props = defineProps({
@@ -21,55 +23,75 @@ const props = defineProps({
   }
 })
 
+const emit = defineEmits(['format-error'])
+
 const videoElement = ref(null)
-let hls = null
+const videoSrc = ref('')
 
-// Build HLS URL with authentication token
-const hlsUrl = computed(() => {
+// Build streaming URL with authentication token
+function getStreamUrl() {
+  if (!props.movieId) return ''
   const token = getAccessToken()
-  const baseUrl = `/api/v1/stream/${props.movieId}/master.m3u8`
-  return token ? `${baseUrl}?token=${token}` : baseUrl
-})
+  const baseUrl = `/api/v1/stream/${props.movieId}`
+  return token ? `${baseUrl}?api_key=${token}` : baseUrl
+}
 
-function initPlayer() {
-  if (!videoElement.value) return
-
+function onError(e) {
   const video = videoElement.value
-
-  if (Hls.isSupported()) {
-    // Use HLS.js for browsers that don't support native HLS
-    hls = new Hls({
-      enableWorker: true,
-      lowLatencyMode: false,
-      xhrSetup: (xhr, url) => {
-        // Token is already in the URL as query parameter
-        // HLS.js will use it automatically for all segment requests
-      }
-    })
-    hls.loadSource(hlsUrl.value)
-    hls.attachMedia(video)
-    hls.on(Hls.Events.MANIFEST_PARSED, () => {
-      // Video is ready to play
-    })
-    hls.on(Hls.Events.ERROR, (event, data) => {
-      console.error('HLS error:', data)
-    })
-  } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-    // Native HLS support (Safari)
-    video.src = hlsUrl.value
-  } else {
-    console.error('HLS is not supported in this browser')
+  const error = video?.error
+  
+  // Check if it's a format error (code 4 = MEDIA_ERR_SRC_NOT_SUPPORTED)
+  if (error?.code === 4 || error?.message?.includes('DEMUXER_ERROR')) {
+    // Detect the content type to show helpful error message
+    if (video?.src) {
+      fetch(video.src, { method: 'GET', headers: { 'Range': 'bytes=0-1023' } })
+        .then(response => {
+          const contentType = response.headers.get('content-type')
+          emit('format-error', { contentType, errorMessage: error?.message })
+        })
+        .catch(() => {
+          // If fetch fails, still emit with available info
+          emit('format-error', { contentType: null, errorMessage: error?.message })
+        })
+    }
   }
 }
 
-onMounted(() => {
-  initPlayer()
+function setupVideo() {
+  if (!props.movieId) return
+
+  const url = getStreamUrl()
+  videoSrc.value = url
+  
+  // Also ensure the video element gets it if it exists
+  if (videoElement.value) {
+    videoElement.value.src = url
+    requestAnimationFrame(() => {
+      videoElement.value.load()
+    })
+  }
+}
+
+// Watch for changes in movieId and update the video source
+watch(() => props.movieId, async (newId) => {
+  if (newId) {
+    await nextTick()
+    setupVideo()
+  }
+}, { immediate: true })
+
+// Watch for when video element becomes available
+watch(videoElement, (element) => {
+  if (element && props.movieId && videoSrc.value) {
+    element.src = videoSrc.value
+    element.load()
+  }
 })
 
-onUnmounted(() => {
-  if (hls) {
-    hls.destroy()
-    hls = null
+onMounted(async () => {
+  await nextTick()
+  if (props.movieId) {
+    setupVideo()
   }
 })
 </script>

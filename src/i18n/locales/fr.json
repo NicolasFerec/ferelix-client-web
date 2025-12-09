@@ -3,12 +3,20 @@
     "appName": "Ferelix",
     "logout": "Déconnexion",
     "settings": "Paramètres",
+    "dashboard": "Tableau de bord",
     "loading": "Chargement...",
     "error": "Erreur",
     "success": "Succès",
     "save": "Enregistrer",
     "cancel": "Annuler",
-    "retry": "Réessayer"
+    "retry": "Réessayer",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "add": "Ajouter",
+    "confirm": "Confirmer",
+    "enabled": "Activé",
+    "disabled": "Désactivé",
+    "actions": "Actions"
   },
   "login": {
     "title": "Connexion à Ferelix",
@@ -31,12 +39,6 @@
     "failed": "Échec de la configuration. Veuillez réessayer.",
     "error": "Échec de la configuration"
   },
-  "home": {
-    "movies": "Films",
-    "noMovies": "Aucun film trouvé. Ajoutez des chemins de bibliothèque pour scanner les médias.",
-    "loadingMovies": "Chargement des films...",
-    "loadFailed": "Échec du chargement des films. Veuillez réessayer."
-  },
   "settings": {
     "title": "Paramètres utilisateur",
     "username": "Nom d'utilisateur",
@@ -48,6 +50,61 @@
     "updateFailed": "Échec de la mise à jour des paramètres. Veuillez réessayer.",
     "passwordMismatch": "Les mots de passe ne correspondent pas",
     "leaveEmpty": "Laisser vide pour conserver le mot de passe actuel"
+  },
+  "dashboard": {
+    "title": "Tableau de bord",
+    "libraries": "Bibliothèques",
+    "users": "Utilisateurs",
+    "settings": "Paramètres",
+    "jobs": "Tâches",
+    "comingSoon": "Bientôt disponible..."
+  },
+  "libraries": {
+    "title": "Bibliothèques",
+    "add": "Ajouter une bibliothèque",
+    "edit": "Modifier la bibliothèque",
+    "delete": "Supprimer la bibliothèque",
+    "confirmDelete": "Êtes-vous sûr de vouloir supprimer cette bibliothèque ?",
+    "path": "Chemin",
+    "type": "Type",
+    "type.movie": "Films",
+    "type.tv_show": "Séries TV",
+    "enabled": "Activée",
+    "createSuccess": "Bibliothèque créée avec succès",
+    "updateSuccess": "Bibliothèque mise à jour avec succès",
+    "deleteSuccess": "Bibliothèque supprimée avec succès",
+    "createFailed": "Échec de la création de la bibliothèque",
+    "updateFailed": "Échec de la mise à jour de la bibliothèque",
+    "deleteFailed": "Échec de la suppression de la bibliothèque",
+    "pathRequired": "Le chemin est requis",
+    "pathExists": "Le chemin de bibliothèque existe déjà",
+    "noLibraries": "Aucune bibliothèque configurée",
+    "loadFailed": "Échec du chargement des bibliothèques"
+  },
+  "home": {
+    "library": "Bibliothèque",
+    "noItems": "Aucun élément trouvé. Ajoutez des chemins de bibliothèque pour scanner les médias.",
+    "noLibraries": "Aucune bibliothèque configurée pour le moment",
+    "loadingMovies": "Chargement de la bibliothèque...",
+    "loadFailed": "Échec du chargement de la bibliothèque. Veuillez réessayer."
+  },
+  "jobs": {
+    "title": "Tâches planifiées",
+    "name": "Nom",
+    "lastRun": "Dernière exécution",
+    "nextRun": "Prochaine exécution",
+    "status": "Statut",
+    "actions": "Actions",
+    "trigger": "Déclencher",
+    "triggering": "Déclenchement...",
+    "triggerSuccess": "Tâche déclenchée avec succès",
+    "triggerFailed": "Échec du déclenchement de la tâche",
+    "loadFailed": "Échec du chargement des tâches",
+    "noJobs": "Aucune tâche planifiée trouvée",
+    "status.pending": "En attente",
+    "status.running": "En cours",
+    "status.neverRun": "Jamais exécutée",
+    "neverRun": "Jamais"
   }
 }
 

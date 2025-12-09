@@ -323,16 +323,85 @@ export const auth = {
 // Export media-related functions
 export const media = {
   /**
-   * Get all movies
+   * Get media item by ID (currently returns Movie)
    */
-  async getMovies(skip = 0, limit = 100) {
-    return get(`/media/movies?skip=${skip}&limit=${limit}`);
+  async getMovie(id) {
+    return get(`/media/${id}`);
   },
 
   /**
-   * Get movie by ID
+   * Get media file by ID
    */
-  async getMovie(id) {
-    return get(`/media/movies/${id}`);
+  async getMediaFile(id) {
+    return get(`/media-files/${id}`);
+  },
+};
+
+// Export library-related functions
+export const libraries = {
+  /**
+   * Get all enabled libraries (for authenticated users)
+   */
+  async getLibraries() {
+    return get('/libraries');
+  },
+
+  /**
+   * Get items from a specific library
+   */
+  async getLibraryItems(libraryId, skip = 0, limit = 100) {
+    return get(`/libraries/${libraryId}/items?skip=${skip}&limit=${limit}`);
+  },
+
+  /**
+   * Get movies from a specific library
+   */
+  async getLibraryMovies(libraryId, skip = 0, limit = 100) {
+    return get(`/libraries/${libraryId}/movies?skip=${skip}&limit=${limit}`);
+  },
+
+  /**
+   * Get all libraries (admin only - for management)
+   */
+  async getAllLibraries() {
+    return get('/library-paths');
+  },
+
+  /**
+   * Create a new library
+   */
+  async createLibrary(path, libraryType = 'movie', enabled = true) {
+    return post('/library-paths', { path, library_type: libraryType, enabled });
+  },
+
+  /**
+   * Update a library
+   */
+  async updateLibrary(id, data) {
+    return patch(`/library-paths/${id}`, data);
+  },
+
+  /**
+   * Delete a library
+   */
+  async deleteLibrary(id) {
+    return del(`/library-paths/${id}`);
+  },
+};
+
+// Export job-related functions
+export const jobs = {
+  /**
+   * Get all scheduled jobs (admin only)
+   */
+  async getJobs() {
+    return get('/jobs');
+  },
+
+  /**
+   * Trigger a job manually (admin only)
+   */
+  async triggerJob(jobId) {
+    return post(`/jobs/${jobId}/trigger`);
   },
 };

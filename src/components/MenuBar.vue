@@ -1,8 +1,19 @@
 <template>
   <header class="bg-gray-900/95 backdrop-blur-sm sticky top-0 z-50 border-b border-gray-800">
     <div class="container mx-auto px-6 py-4 flex justify-between items-center">
-      <h1 class="text-3xl font-bold text-white">{{ $t('common.appName') }}</h1>
-      <div class="relative" ref="dropdownContainer">
+      <router-link to="/" class="text-3xl font-bold text-white hover:text-indigo-400 transition-colors cursor-pointer">
+        {{ $t('common.appName') }}
+      </router-link>
+      <div class="flex items-center space-x-4">
+        <!-- Dashboard button (admin only) -->
+        <router-link
+          v-if="isAdmin"
+          to="/dashboard"
+          class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-md transition-colors"
+        >
+          {{ $t('common.dashboard') }}
+        </router-link>
+        <div class="relative" ref="dropdownContainer">
         <button
           @click="toggleDropdown"
           class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-700 hover:bg-gray-600 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 focus:ring-indigo-500"
@@ -93,6 +104,7 @@
             </div>
           </div>
         </transition>
+        </div>
       </div>
     </div>
   </header>
@@ -102,8 +114,10 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { auth } from '@/api/client'
+import { useUser } from '@/composables/useUser'
 
 const router = useRouter()
+const { isAdmin, clearUser } = useUser()
 const isDropdownOpen = ref(false)
 const dropdownContainer = ref(null)
 
@@ -143,10 +157,12 @@ async function handleLogout() {
   closeDropdown()
   try {
     await auth.logout()
+    clearUser()
     router.push('/login')
   } catch (err) {
     console.error('Logout failed:', err)
-    // Still redirect to login even if API call fails
+    // Still clear user and redirect to login even if API call fails
+    clearUser()
     router.push('/login')
   }
 }

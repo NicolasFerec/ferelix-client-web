@@ -3,12 +3,20 @@
     "appName": "Ferelix",
     "logout": "Logout",
     "settings": "Settings",
+    "dashboard": "Dashboard",
     "loading": "Loading...",
     "error": "Error",
     "success": "Success",
     "save": "Save",
     "cancel": "Cancel",
-    "retry": "Retry"
+    "retry": "Retry",
+    "edit": "Edit",
+    "delete": "Delete",
+    "add": "Add",
+    "confirm": "Confirm",
+    "enabled": "Enabled",
+    "disabled": "Disabled",
+    "actions": "Actions"
   },
   "login": {
     "title": "Sign in to Ferelix",
@@ -31,12 +39,6 @@
     "failed": "Setup failed. Please try again.",
     "error": "Setup failed"
   },
-  "home": {
-    "movies": "Movies",
-    "noMovies": "No movies found. Add library paths to scan for media.",
-    "loadingMovies": "Loading movies...",
-    "loadFailed": "Failed to load movies. Please try again."
-  },
   "settings": {
     "title": "User Settings",
     "username": "Username",
@@ -48,6 +50,61 @@
     "updateFailed": "Failed to update settings. Please try again.",
     "passwordMismatch": "Passwords do not match",
     "leaveEmpty": "Leave empty to keep current password"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "libraries": "Libraries",
+    "users": "Users",
+    "settings": "Settings",
+    "jobs": "Jobs",
+    "comingSoon": "Coming soon..."
+  },
+  "libraries": {
+    "title": "Libraries",
+    "add": "Add Library",
+    "edit": "Edit Library",
+    "delete": "Delete Library",
+    "confirmDelete": "Are you sure you want to delete this library?",
+    "path": "Path",
+    "type": "Type",
+    "type.movie": "Movies",
+    "type.tv_show": "TV Shows",
+    "enabled": "Enabled",
+    "createSuccess": "Library created successfully",
+    "updateSuccess": "Library updated successfully",
+    "deleteSuccess": "Library deleted successfully",
+    "createFailed": "Failed to create library",
+    "updateFailed": "Failed to update library",
+    "deleteFailed": "Failed to delete library",
+    "pathRequired": "Path is required",
+    "pathExists": "Library path already exists",
+    "noLibraries": "No libraries configured",
+    "loadFailed": "Failed to load libraries"
+  },
+  "home": {
+    "library": "Library",
+    "noItems": "No items found. Add library paths to scan for media.",
+    "noLibraries": "No library configured yet",
+    "loadingMovies": "Loading library...",
+    "loadFailed": "Failed to load library. Please try again."
+  },
+  "jobs": {
+    "title": "Scheduled Jobs",
+    "name": "Name",
+    "lastRun": "Last Run",
+    "nextRun": "Next Run",
+    "status": "Status",
+    "actions": "Actions",
+    "trigger": "Trigger",
+    "triggering": "Triggering...",
+    "triggerSuccess": "Job triggered successfully",
+    "triggerFailed": "Failed to trigger job",
+    "loadFailed": "Failed to load jobs",
+    "noJobs": "No scheduled jobs found",
+    "status.pending": "Pending",
+    "status.running": "Running",
+    "status.neverRun": "Never Run",
+    "neverRun": "Never"
   }
 }
 

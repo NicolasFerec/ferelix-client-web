@@ -1,10 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import MovieDetailView from '../views/MovieDetailView.vue'
+import MediaDetailView from '../views/MediaDetailView.vue'
 import LoginView from '../views/LoginView.vue'
 import SetupView from '../views/SetupView.vue'
 import UserSettingsView from '../views/UserSettingsView.vue'
-import { isAuthenticated } from '@/api/client'
+import DashboardView from '../views/DashboardView.vue'
+import { isAuthenticated, auth } from '@/api/client'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -15,9 +16,9 @@ const router = createRouter({
       component: HomeView
     },
     {
-      path: '/movie/:id',
-      name: 'movie-detail',
-      component: MovieDetailView,
+      path: '/media/:id',
+      name: 'media-detail',
+      component: MediaDetailView,
       props: true
     },
     {
@@ -34,20 +35,43 @@ const router = createRouter({
       path: '/settings',
       name: 'settings',
       component: UserSettingsView
+    },
+    {
+      path: '/dashboard',
+      name: 'dashboard',
+      component: DashboardView
     }
   ]
 })
 
-// Global navigation guard for authentication
-router.beforeEach((to, from, next) => {
+// Global navigation guard for authentication and admin routes
+router.beforeEach(async (to, from, next) => {
   const publicPages = ['/login', '/setup']
   const authRequired = !publicPages.includes(to.path)
+  const adminPages = ['/dashboard']
   
+  // Check authentication
   if (authRequired && !isAuthenticated()) {
     next('/login')
-  } else {
-    next()
+    return
   }
+  
+  // Check admin access for admin-only pages
+  if (adminPages.includes(to.path)) {
+    try {
+      const user = await auth.getCurrentUser()
+      if (!user || !user.is_admin) {
+        next('/')
+        return
+      }
+    } catch (error) {
+      console.error('Failed to check admin status:', error)
+      next('/')
+      return
+    }
+  }
+  
+  next()
 })
 
 export default router

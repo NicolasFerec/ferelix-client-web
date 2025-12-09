@@ -5,7 +5,7 @@
   >
     <div class="relative overflow-hidden rounded-lg bg-gray-800 shadow-lg">
       <img
-        :src="movie.posterUrl"
+        :src="movie.poster_url || ''"
         :alt="movie.title"
         class="w-full h-auto object-cover"
         loading="lazy"
@@ -38,7 +38,7 @@ const props = defineProps({
 const router = useRouter()
 
 function handleClick() {
-  router.push({ name: 'movie-detail', params: { id: props.movie.id } })
+  router.push({ name: 'media-detail', params: { id: props.movie.id } })
 }
 </script>
 

@@ -7,23 +7,16 @@
 <script setup>
 import { onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { isAuthenticated } from '@/api/client'
-import { auth } from '@/api/client'
+import { useUser } from '@/composables/useUser'
 
 const { locale } = useI18n()
+const { loadUser } = useUser()
 
-// Load user language preference on app start if authenticated
+// Load user information on app start if authenticated
 onMounted(async () => {
-  if (isAuthenticated()) {
-    try {
-      const user = await auth.getCurrentUser()
-      if (user && user.language) {
-        locale.value = user.language
-      }
-    } catch (err) {
-      console.error('Failed to load user preferences:', err)
-      // Silently fail - user can still use the app
-    }
+  const user = await loadUser()
+  if (user && user.language) {
+    locale.value = user.language
   }
 })
 </script>

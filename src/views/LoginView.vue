@@ -64,8 +64,10 @@ import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { auth } from '@/api/client';
+import { useUser } from '@/composables/useUser';
 
 const { t, locale } = useI18n();
+const { updateUser } = useUser();
 
 const router = useRouter();
 
@@ -92,10 +94,14 @@ async function handleLogin() {
 
   try {
     const response = await auth.login(username.value, password.value, navigator.userAgent);
-    // Set i18n locale based on user preference
-    if (response.user && response.user.language) {
-      locale.value = response.user.language;
+
+    // Load user information and set locale
+    const user = await auth.getCurrentUser();
+    updateUser(user);
+    if (user && user.language) {
+      locale.value = user.language;
     }
+
     router.push('/');
   } catch (err) {
     console.error('Login failed:', err);
