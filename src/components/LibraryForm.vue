@@ -24,7 +24,7 @@
           <!-- Library Type -->
           <div>
             <label class="block text-sm font-medium text-gray-300 mb-2">
-              {{ $t('libraries.type') }}
+              {{ $t('libraries.typeLabel') }}
             </label>
             <select
               v-model="form.library_type"

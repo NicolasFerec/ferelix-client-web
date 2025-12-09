@@ -66,9 +66,11 @@
     "delete": "Supprimer la bibliothèque",
     "confirmDelete": "Êtes-vous sûr de vouloir supprimer cette bibliothèque ?",
     "path": "Chemin",
-    "type": "Type",
-    "type.movie": "Films",
-    "type.tv_show": "Séries TV",
+    "typeLabel": "Type",
+    "type": {
+      "movie": "Films",
+      "tv_show": "Séries TV"
+    },
     "enabled": "Activée",
     "createSuccess": "Bibliothèque créée avec succès",
     "updateSuccess": "Bibliothèque mise à jour avec succès",
@@ -93,7 +95,7 @@
     "name": "Nom",
     "lastRun": "Dernière exécution",
     "nextRun": "Prochaine exécution",
-    "status": "Statut",
+    "statusLabel": "Statut",
     "actions": "Actions",
     "trigger": "Déclencher",
     "triggering": "Déclenchement...",
@@ -101,10 +103,17 @@
     "triggerFailed": "Échec du déclenchement de la tâche",
     "loadFailed": "Échec du chargement des tâches",
     "noJobs": "Aucune tâche planifiée trouvée",
-    "status.pending": "En attente",
-    "status.running": "En cours",
-    "status.neverRun": "Jamais exécutée",
-    "neverRun": "Jamais"
+    "status": {
+      "pending": "En attente",
+      "running": "En cours",
+      "success": "Terminée",
+      "failed": "Échec",
+      "neverRun": "Jamais exécutée"
+    },
+    "neverRun": "Jamais",
+    "names": {
+      "library_scanner": "Analyseur de bibliothèque"
+    }
   }
 }
 

@@ -40,7 +40,7 @@
               {{ $t('jobs.nextRun') }}
             </th>
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-              {{ $t('jobs.status') }}
+              {{ $t('jobs.statusLabel') }}
             </th>
             <th class="px-6 py-3 text-right text-xs font-medium text-gray-300 uppercase tracking-wider">
               {{ $t('jobs.actions') }}
@@ -50,7 +50,7 @@
         <tbody class="bg-gray-800 divide-y divide-gray-700">
           <tr v-for="job in jobs" :key="job.id" class="hover:bg-gray-750">
             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">
-              {{ job.name }}
+              {{ getJobName(job) }}
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
               {{ formatDate(job.last_run_time) }}
@@ -101,9 +101,9 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { jobs as jobsApi } from '@/api/client'
+import { jobs as jobsApi, getAccessToken } from '@/api/client'
 
 const { t, locale } = useI18n()
 
@@ -115,6 +115,9 @@ const showSuccess = ref(false)
 const showError = ref(false)
 const successMessage = ref('')
 const errorMessage = ref('')
+const liveConnected = ref(false)
+const websocketRef = ref(null)
+let reconnectTimer = null
 
 // Date formatter using browser's Intl API
 function formatDate(dateString) {
@@ -141,24 +144,63 @@ function formatDate(dateString) {
   }
 }
 
+function getJobName(job) {
+  if (job?.name_key) {
+    const translated = t(job.name_key)
+    if (translated && translated !== job.name_key) {
+      return translated
+    }
+  }
+  return job?.name || job?.id || ''
+}
+
 function getStatusLabel(status) {
-  if (!status || status === 'pending') {
-    return t('jobs.status.pending')
+  switch (status) {
+    case 'running':
+      return t('jobs.status.running')
+    case 'success':
+      return t('jobs.status.success')
+    case 'failed':
+      return t('jobs.status.failed')
+    case 'pending':
+    default:
+      return t('jobs.status.pending')
   }
-  if (status === 'running') {
-    return t('jobs.status.running')
-  }
-  return t('jobs.status.neverRun')
 }
 
 function getStatusClass(status) {
-  if (!status || status === 'pending') {
-    return 'bg-yellow-100 text-yellow-800'
+  switch (status) {
+    case 'running':
+      return 'bg-blue-100 text-blue-800'
+    case 'success':
+      return 'bg-green-100 text-green-800'
+    case 'failed':
+      return 'bg-red-100 text-red-800'
+    case 'pending':
+    default:
+      return 'bg-yellow-100 text-yellow-800'
   }
-  if (status === 'running') {
-    return 'bg-blue-100 text-blue-800'
+}
+
+function upsertJob(jobUpdate) {
+  const existingIndex = jobs.value.findIndex(job => job.id === jobUpdate.id)
+  if (existingIndex !== -1) {
+    jobs.value[existingIndex] = { ...jobs.value[existingIndex], ...jobUpdate }
+  } else {
+    jobs.value = [...jobs.value, jobUpdate]
   }
-  return 'bg-gray-100 text-gray-800'
+}
+
+function addTriggering(jobId) {
+  const next = new Set(triggeringJobs.value)
+  next.add(jobId)
+  triggeringJobs.value = next
+}
+
+function removeTriggering(jobId) {
+  const next = new Set(triggeringJobs.value)
+  next.delete(jobId)
+  triggeringJobs.value = next
 }
 
 async function loadJobs() {
@@ -174,38 +216,111 @@ async function loadJobs() {
   }
 }
 
+function disconnectWebSocket() {
+  if (reconnectTimer) {
+    clearTimeout(reconnectTimer)
+    reconnectTimer = null
+  }
+  if (websocketRef.value) {
+    websocketRef.value.close()
+    websocketRef.value = null
+  }
+  liveConnected.value = false
+}
+
+function scheduleReconnect() {
+  if (reconnectTimer) {
+    return
+  }
+  reconnectTimer = setTimeout(() => {
+    reconnectTimer = null
+    connectWebSocket()
+  }, 3000)
+}
+
+function connectWebSocket() {
+  const token = getAccessToken()
+  if (!token) {
+    return
+  }
+
+  const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws'
+  const socketUrl = `${protocol}://${window.location.host}/api/v1/jobs/ws?api_key=${encodeURIComponent(token)}`
+  const socket = new WebSocket(socketUrl)
+  websocketRef.value = socket
+
+  socket.onopen = () => {
+    liveConnected.value = true
+  }
+
+  socket.onclose = () => {
+    liveConnected.value = false
+    scheduleReconnect()
+  }
+
+  socket.onerror = () => {
+    liveConnected.value = false
+    socket.close()
+  }
+
+  socket.onmessage = event => {
+    try {
+      const payload = JSON.parse(event.data)
+      if (payload.type === 'snapshot' && Array.isArray(payload.jobs)) {
+        jobs.value = payload.jobs
+      } else if (payload.type === 'job_update' && payload.job) {
+        upsertJob(payload.job)
+      }
+    } catch (err) {
+      console.error('Failed to parse job update message:', err)
+    }
+  }
+}
+
 async function triggerJob(jobId) {
-  triggeringJobs.value.add(jobId)
+  addTriggering(jobId)
   showSuccess.value = false
   showError.value = false
 
   try {
     await jobsApi.triggerJob(jobId)
+    // Optimistically mark as running while the job executes
+    upsertJob({
+      id: jobId,
+      status: 'running',
+      running_since: new Date().toISOString(),
+      error: null,
+    })
     successMessage.value = t('jobs.triggerSuccess')
     showSuccess.value = true
-    
+
     // Hide success message after 3 seconds
     setTimeout(() => {
       showSuccess.value = false
     }, 3000)
-
-    // Reload jobs to get updated times
-    await loadJobs()
   } catch (err) {
     console.error('Failed to trigger job:', err)
     errorMessage.value = err.data?.detail || t('jobs.triggerFailed')
     showError.value = true
-    
+
     // Hide error message after 5 seconds
     setTimeout(() => {
       showError.value = false
     }, 5000)
   } finally {
-    triggeringJobs.value.delete(jobId)
+    removeTriggering(jobId)
   }
 }
 
 onMounted(() => {
   loadJobs()
+  connectWebSocket()
+})
+
+onBeforeUnmount(() => {
+  disconnectWebSocket()
 })
 </script>
+
+
+
