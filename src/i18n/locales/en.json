@@ -1,0 +1,53 @@
+{
+  "common": {
+    "appName": "Ferelix",
+    "logout": "Logout",
+    "settings": "Settings",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "save": "Save",
+    "cancel": "Cancel",
+    "retry": "Retry"
+  },
+  "login": {
+    "title": "Sign in to Ferelix",
+    "username": "Username",
+    "password": "Password",
+    "signIn": "Sign in",
+    "signingIn": "Signing in...",
+    "failed": "Login failed. Please check your credentials.",
+    "error": "Login failed"
+  },
+  "setup": {
+    "title": "Welcome to Ferelix",
+    "subtitle": "Create your admin account to get started",
+    "username": "Username",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "createAccount": "Create Admin Account",
+    "creating": "Creating account...",
+    "passwordMismatch": "Passwords do not match",
+    "failed": "Setup failed. Please try again.",
+    "error": "Setup failed"
+  },
+  "home": {
+    "movies": "Movies",
+    "noMovies": "No movies found. Add library paths to scan for media.",
+    "loadingMovies": "Loading movies...",
+    "loadFailed": "Failed to load movies. Please try again."
+  },
+  "settings": {
+    "title": "User Settings",
+    "username": "Username",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "language": "Language",
+    "updateSuccess": "Settings updated successfully",
+    "updateFailed": "Failed to update settings. Please try again.",
+    "passwordMismatch": "Passwords do not match",
+    "leaveEmpty": "Leave empty to keep current password"
+  }
+}
+

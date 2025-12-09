@@ -3,10 +3,10 @@
     <div class="max-w-md w-full space-y-8">
       <div>
         <h2 class="mt-6 text-center text-3xl font-extrabold text-white">
-          Welcome to Ferelix
+          {{ $t('setup.title') }}
         </h2>
         <p class="mt-2 text-center text-sm text-gray-400">
-          Create your admin account to get started
+          {{ $t('setup.subtitle') }}
         </p>
       </div>
       
@@ -31,7 +31,7 @@
               type="text"
               required
               class="appearance-none relative block w-full px-3 py-2 border border-gray-700 placeholder-gray-500 text-white bg-gray-800 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-              placeholder="Username"
+              :placeholder="$t('setup.username')"
             />
           </div>
           <div>
@@ -41,6 +41,7 @@
               v-model="email"
               name="email"
               type="email"
+              required
               class="appearance-none relative block w-full px-3 py-2 border border-gray-700 placeholder-gray-500 text-white bg-gray-800 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
               placeholder="Email"
             />
@@ -54,7 +55,7 @@
               type="password"
               required
               class="appearance-none relative block w-full px-3 py-2 border border-gray-700 placeholder-gray-500 text-white bg-gray-800 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-              placeholder="Password (min 8 characters)"
+              :placeholder="$t('setup.password')"
             />
           </div>
           <div>
@@ -66,7 +67,7 @@
               type="password"
               required
               class="appearance-none relative block w-full px-3 py-2 border border-gray-700 placeholder-gray-500 text-white bg-gray-800 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-              placeholder="Confirm Password"
+              :placeholder="$t('setup.confirmPassword')"
             />
           </div>
         </div>
@@ -77,7 +78,7 @@
             :disabled="loading"
             class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {{ loading ? 'Creating account...' : 'Create Admin Account' }}
+            {{ loading ? $t('setup.creating') : $t('setup.createAccount') }}
           </button>
         </div>
       </form>
@@ -86,9 +87,12 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 import { auth } from '@/api/client';
+
+const { t } = useI18n();
 
 const router = useRouter();
 
@@ -99,23 +103,43 @@ const confirmPassword = ref('');
 const loading = ref(false);
 const error = ref('');
 
+// Detect browser language
+function detectBrowserLanguage() {
+  const browserLang = navigator.language || navigator.userLanguage;
+  const langCode = browserLang.split('-')[0].toLowerCase();
+  
+  // Supported languages: en, fr
+  if (langCode === 'fr') {
+    return 'fr';
+  }
+  
+  // Default to English
+  return 'en';
+}
+
+const browserLanguage = ref('en');
+
+onMounted(() => {
+  browserLanguage.value = detectBrowserLanguage();
+});
+
 async function handleSetup() {
   error.value = '';
   
   // Validate password match
   if (password.value !== confirmPassword.value) {
-    error.value = 'Passwords do not match';
+    error.value = t('setup.passwordMismatch');
     return;
   }
 
   loading.value = true;
 
   try {
-    await auth.createAdmin(username.value, email.value, password.value);
+    await auth.createAdmin(username.value, email.value, password.value, browserLanguage.value);
     router.push('/login');
   } catch (err) {
     console.error('Setup failed:', err);
-    error.value = err.data?.detail || 'Setup failed. Please try again.';
+    error.value = err.data?.detail || t('setup.failed');
   } finally {
     loading.value = false;
   }

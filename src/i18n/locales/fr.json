@@ -1,0 +1,53 @@
+{
+  "common": {
+    "appName": "Ferelix",
+    "logout": "Déconnexion",
+    "settings": "Paramètres",
+    "loading": "Chargement...",
+    "error": "Erreur",
+    "success": "Succès",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "retry": "Réessayer"
+  },
+  "login": {
+    "title": "Connexion à Ferelix",
+    "username": "Nom d'utilisateur",
+    "password": "Mot de passe",
+    "signIn": "Se connecter",
+    "signingIn": "Connexion...",
+    "failed": "Échec de la connexion. Veuillez vérifier vos identifiants.",
+    "error": "Échec de la connexion"
+  },
+  "setup": {
+    "title": "Bienvenue sur Ferelix",
+    "subtitle": "Créez votre compte administrateur pour commencer",
+    "username": "Nom d'utilisateur",
+    "password": "Mot de passe",
+    "confirmPassword": "Confirmer le mot de passe",
+    "createAccount": "Créer le compte administrateur",
+    "creating": "Création du compte...",
+    "passwordMismatch": "Les mots de passe ne correspondent pas",
+    "failed": "Échec de la configuration. Veuillez réessayer.",
+    "error": "Échec de la configuration"
+  },
+  "home": {
+    "movies": "Films",
+    "noMovies": "Aucun film trouvé. Ajoutez des chemins de bibliothèque pour scanner les médias.",
+    "loadingMovies": "Chargement des films...",
+    "loadFailed": "Échec du chargement des films. Veuillez réessayer."
+  },
+  "settings": {
+    "title": "Paramètres utilisateur",
+    "username": "Nom d'utilisateur",
+    "email": "Email",
+    "password": "Mot de passe",
+    "confirmPassword": "Confirmer le mot de passe",
+    "language": "Langue",
+    "updateSuccess": "Paramètres mis à jour avec succès",
+    "updateFailed": "Échec de la mise à jour des paramètres. Veuillez réessayer.",
+    "passwordMismatch": "Les mots de passe ne correspondent pas",
+    "leaveEmpty": "Laisser vide pour conserver le mot de passe actuel"
+  }
+}
+

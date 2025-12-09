@@ -196,6 +196,20 @@ export async function post(endpoint, data) {
 }
 
 /**
+ * PATCH request
+ */
+export async function patch(endpoint, data) {
+  const response = await authenticatedFetch(`${API_BASE}${endpoint}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+  return parseResponse(response);
+}
+
+/**
  * DELETE request
  */
 export async function del(endpoint, data = null) {
@@ -281,14 +295,28 @@ export const auth = {
   /**
    * Create admin account (first-time setup)
    */
-  async createAdmin(username, email, password) {
+  async createAdmin(username, email, password, language = 'en') {
     return publicRequest(`${API_BASE}/setup/admin`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ username, email, password }),
+      body: JSON.stringify({ username, email, password, language }),
     });
+  },
+
+  /**
+   * Get current user information
+   */
+  async getCurrentUser() {
+    return get('/users/me');
+  },
+
+  /**
+   * Update current user information
+   */
+  async updateCurrentUser(data) {
+    return patch('/users/me', data);
   },
 };
 

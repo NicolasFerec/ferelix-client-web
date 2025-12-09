@@ -1,5 +1,6 @@
 <template>
-  <div class="movie-detail-view min-h-screen">
+  <div class="movie-detail-view min-h-screen bg-gray-900">
+    <MenuBar />
     <div v-if="loading" class="container mx-auto px-6 py-8 text-center text-gray-400">
       Loading movie...
     </div>
@@ -98,6 +99,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import MenuBar from '../components/MenuBar.vue'
 import VideoPlayer from '../components/VideoPlayer.vue'
 import { media } from '@/api/client'
 
