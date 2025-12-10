@@ -245,7 +245,7 @@ function connectWebSocket() {
   }
 
   const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws'
-  const socketUrl = `${protocol}://${window.location.host}/api/v1/jobs/ws?api_key=${encodeURIComponent(token)}`
+  const socketUrl = `${protocol}://${window.location.host}/api/v1/dashboard/jobs/ws?api_key=${encodeURIComponent(token)}`
   const socket = new WebSocket(socketUrl)
   websocketRef.value = socket
 

@@ -35,18 +35,6 @@
             />
           </div>
           <div>
-            <label for="email" class="sr-only">Email</label>
-            <input
-              id="email"
-              v-model="email"
-              name="email"
-              type="email"
-              required
-              class="appearance-none relative block w-full px-3 py-2 border border-gray-700 placeholder-gray-500 text-white bg-gray-800 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-              placeholder="Email"
-            />
-          </div>
-          <div>
             <label for="password" class="sr-only">Password</label>
             <input
               id="password"
@@ -97,7 +85,6 @@ const { t } = useI18n();
 const router = useRouter();
 
 const username = ref('');
-const email = ref('');
 const password = ref('');
 const confirmPassword = ref('');
 const loading = ref(false);
@@ -135,8 +122,8 @@ async function handleSetup() {
   loading.value = true;
 
   try {
-    await auth.createAdmin(username.value, email.value, password.value, browserLanguage.value);
-    router.push('/login');
+    await auth.createAdmin(username.value, password.value, browserLanguage.value);
+    router.push('/login');  
   } catch (err) {
     console.error('Setup failed:', err);
     error.value = err.data?.detail || t('setup.failed');

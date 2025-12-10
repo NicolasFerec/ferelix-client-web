@@ -295,13 +295,13 @@ export const auth = {
   /**
    * Create admin account (first-time setup)
    */
-  async createAdmin(username, email, password, language = 'en') {
+  async createAdmin(username, password, language = 'en') {
     return publicRequest(`${API_BASE}/setup/admin`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ username, email, password, language }),
+      body: JSON.stringify({ username, password, language }),
     });
   },
 
@@ -323,17 +323,10 @@ export const auth = {
 // Export media-related functions
 export const media = {
   /**
-   * Get media item by ID (currently returns Movie)
-   */
-  async getMovie(id) {
-    return get(`/media/${id}`);
-  },
-
-  /**
    * Get media file by ID
    */
   async getMediaFile(id) {
-    return get(`/media-files/${id}`);
+    return get(`/media/${id}`);
   },
 };
 
@@ -354,38 +347,31 @@ export const libraries = {
   },
 
   /**
-   * Get movies from a specific library
-   */
-  async getLibraryMovies(libraryId, skip = 0, limit = 100) {
-    return get(`/libraries/${libraryId}/movies?skip=${skip}&limit=${limit}`);
-  },
-
-  /**
    * Get all libraries (admin only - for management)
    */
   async getAllLibraries() {
-    return get('/library-paths');
+    return get('/dashboard/libraries');
   },
 
   /**
    * Create a new library
    */
   async createLibrary(path, libraryType = 'movie', enabled = true) {
-    return post('/library-paths', { path, library_type: libraryType, enabled });
+    return post('/dashboard/libraries', { path, library_type: libraryType, enabled });
   },
 
   /**
    * Update a library
    */
   async updateLibrary(id, data) {
-    return patch(`/library-paths/${id}`, data);
+    return patch(`/dashboard/libraries/${id}`, data);
   },
 
   /**
    * Delete a library
    */
   async deleteLibrary(id) {
-    return del(`/library-paths/${id}`);
+    return del(`/dashboard/libraries/${id}`);
   },
 };
 
@@ -395,13 +381,13 @@ export const jobs = {
    * Get all scheduled jobs (admin only)
    */
   async getJobs() {
-    return get('/jobs');
+    return get('/dashboard/jobs');
   },
 
   /**
    * Trigger a job manually (admin only)
    */
   async triggerJob(jobId) {
-    return post(`/jobs/${jobId}/trigger`);
+    return post(`/dashboard/jobs/${jobId}/trigger`);
   },
 };

@@ -87,8 +87,8 @@
     "library": "Library",
     "noItems": "No items found. Add library paths to scan for media.",
     "noLibraries": "No library configured yet",
-    "loadingMovies": "Loading library...",
-    "loadFailed": "Failed to load library. Please try again."
+    "loadingMediaFiles": "Loading media files...",
+    "loadFailed": "Failed to load media files. Please try again."
   },
   "jobs": {
     "title": "Scheduled Jobs",

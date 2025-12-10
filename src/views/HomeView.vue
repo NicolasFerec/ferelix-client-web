@@ -4,7 +4,7 @@
 
     <main class="container mx-auto px-6 py-8">
       <div v-if="loading" class="text-center text-gray-400 py-12">
-        {{ $t('home.loadingMovies') }}
+        {{ $t('home.loadingMediaFiles') }}
       </div>
       
       <div v-else-if="error" class="text-center py-12">
@@ -19,16 +19,26 @@
       
       <div v-else>
         <h2 class="text-2xl font-semibold mb-6 text-white">{{ $t('home.library') }}</h2>
-        <div v-if="movies.length === 0" class="text-center text-gray-400 py-12">
-          <p v-if="!hasLibraries">{{ $t('home.noLibraries') }}</p>
-          <p v-else>{{ $t('home.noItems') }}</p>
+        <div v-if="!hasLibraries" class="text-center text-gray-400 py-12">
+          <p>{{ $t('home.noLibraries') }}</p>
         </div>
-        <div v-else class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-          <MovieCard
-            v-for="movie in movies"
-            :key="movie.id"
-            :movie="movie"
-          />
+        <div v-else-if="libraries.length === 0 || Object.keys(mediaFilesByLibrary).length === 0" class="text-center text-gray-400 py-12">
+          <p>{{ $t('home.noItems') }}</p>
+        </div>
+        <div v-else>
+          <div v-for="library in libraries" :key="library.id" class="mb-12">
+            <h3 class="text-xl font-semibold mb-4 text-white">{{ library.path }}</h3>
+            <div v-if="mediaFilesByLibrary[library.id] && mediaFilesByLibrary[library.id].length > 0" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+              <MediaCard
+                v-for="mediaFile in mediaFilesByLibrary[library.id]"
+                :key="mediaFile.id"
+                :mediaFile="mediaFile"
+              />
+            </div>
+            <div v-else class="text-gray-500 text-sm py-4">
+              {{ $t('home.noItems') }}
+            </div>
+          </div>
         </div>
       </div>
     </main>
@@ -40,14 +50,14 @@ import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import MenuBar from '../components/MenuBar.vue'
-import MovieCard from '../components/MovieCard.vue'
+import MediaCard from '../components/MediaCard.vue'
 import { libraries as libraryApi } from '@/api/client'
 
 const { t } = useI18n()
 
 const router = useRouter()
 
-const movies = ref([])
+const mediaFilesByLibrary = ref({})
 const libraries = ref([])
 const loading = ref(false)
 const error = ref('')
@@ -77,33 +87,26 @@ async function loadItems() {
 
     // If no libraries exist, show empty state (not an error)
     if (!hasLibraries.value) {
-      movies.value = []
+      mediaFilesByLibrary.value = {}
       return
     }
 
-    // Query each library for movies and aggregate them
-    const allMovies = []
+    // Query each library for media files and store them per library
+    const mediaFilesMap = {}
     for (const library of libraries.value) {
       try {
-        const libraryMovies = await libraryApi.getLibraryMovies(library.id)
-        allMovies.push(...libraryMovies)
+        const libraryMediaFiles = await libraryApi.getLibraryItems(library.id)
+        mediaFilesMap[library.id] = libraryMediaFiles
       } catch (err) {
-        console.error(`Failed to load movies from library ${library.id}:`, err)
+        console.error(`Failed to load media files from library ${library.id}:`, err)
         // Continue loading other libraries even if one fails
+        mediaFilesMap[library.id] = []
       }
     }
 
-    // Remove duplicates based on movie ID (in case same movie appears in multiple libraries)
-    const uniqueMovies = allMovies.reduce((acc, movie) => {
-      if (!acc.find(m => m.id === movie.id)) {
-        acc.push(movie)
-      }
-      return acc
-    }, [])
-
-    movies.value = uniqueMovies
+    mediaFilesByLibrary.value = mediaFilesMap
   } catch (err) {
-    console.error('Failed to load movies:', err)
+    console.error('Failed to load media files:', err)
     // Only show error for actual API failures (network/server errors)
     // Successful API calls that return empty arrays are handled above
     error.value = t('home.loadFailed')

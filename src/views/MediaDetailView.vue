@@ -15,16 +15,9 @@
       </button>
     </div>
 
-    <div v-else-if="movie" class="relative">
-      <!-- Backdrop -->
-      <div class="relative h-64 md:h-96 overflow-hidden">
-        <img
-          v-if="movie.backdrop_url || movie.poster_url"
-          :src="movie.backdrop_url || movie.poster_url"
-          :alt="movie.title"
-          class="w-full h-full object-cover"
-        />
-        <div v-else class="w-full h-full bg-gray-800"></div>
+    <div v-else-if="mediaFile" class="relative">
+      <!-- Header -->
+      <div class="relative h-64 md:h-96 overflow-hidden bg-gray-800">
         <div class="absolute inset-0 bg-gradient-to-b from-transparent via-gray-900/50 to-gray-900"></div>
         
         <!-- Back Button -->
@@ -42,38 +35,35 @@
       <!-- Content -->
       <div class="container mx-auto px-6 py-8 -mt-32 relative z-10">
         <div class="flex flex-col md:flex-row gap-8">
-          <!-- Poster -->
+          <!-- Poster Placeholder -->
           <div class="flex-shrink-0">
-            <img
-              v-if="movie.poster_url"
-              :src="movie.poster_url"
-              :alt="movie.title"
-              class="w-48 md:w-64 rounded-lg shadow-2xl"
-            />
-            <div v-else class="w-48 md:w-64 h-72 bg-gray-800 rounded-lg shadow-2xl flex items-center justify-center">
-              <span class="text-gray-600">No poster</span>
+            <div class="w-48 md:w-64 aspect-[2/3] bg-gray-800 rounded-lg shadow-2xl flex items-center justify-center">
+              <svg class="w-24 h-24 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+              </svg>
             </div>
           </div>
 
           <!-- Info -->
           <div class="flex-1 text-white">
-            <h1 class="text-4xl md:text-5xl font-bold mb-4">{{ movie.title }}</h1>
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">{{ getMediaTitle() }}</h1>
             <div class="flex items-center gap-4 mb-4 text-gray-300">
-              <span v-if="movie.year">{{ movie.year }}</span>
-              <span v-if="movie.year">•</span>
-              <span v-if="movie.genre">{{ movie.genre }}</span>
-              <span v-if="movie.genre">•</span>
-              <span v-if="movie.duration">{{ formatDuration(movie.duration) }}</span>
+              <span v-if="mediaFile.duration">{{ formatDuration(mediaFile.duration) }}</span>
+              <span v-if="mediaFile.duration && mediaFile.file_extension">•</span>
+              <span v-if="mediaFile.file_extension">{{ mediaFile.file_extension.toUpperCase() }}</span>
             </div>
-            <p v-if="movie.description" class="text-lg text-gray-300 mb-6 leading-relaxed">{{ movie.description }}</p>
             
             <!-- MediaFile Information -->
-            <div v-if="mediaFile" class="mb-6 p-4 bg-gray-800/50 rounded-lg">
+            <div class="mb-6 p-4 bg-gray-800/50 rounded-lg">
               <h2 class="text-xl font-semibold mb-3">File Information</h2>
               <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
                 <div>
                   <span class="text-gray-400">File:</span>
                   <span class="ml-2 text-gray-300">{{ mediaFile.file_name }}</span>
+                </div>
+                <div>
+                  <span class="text-gray-400">Path:</span>
+                  <span class="ml-2 text-gray-300 break-all">{{ mediaFile.file_path }}</span>
                 </div>
                 <div v-if="mediaFile.duration">
                   <span class="text-gray-400">Duration:</span>
@@ -99,7 +89,7 @@
             </div>
 
             <button
-              v-if="movie.media_file_id"
+              v-if="mediaFile.id"
               @click="handlePlayClick"
               class="bg-primary-600 hover:bg-primary-700 text-white font-semibold py-3 px-8 rounded-lg transition-colors duration-200 flex items-center gap-2"
             >
@@ -112,11 +102,11 @@
         </div>
 
         <!-- Video Player Section -->
-        <div v-if="showPlayer && movie.media_file_id" class="mt-8">
+        <div v-if="showPlayer && mediaFile.id" class="mt-8">
           <div class="bg-black rounded-lg overflow-hidden">
             <VideoPlayer 
-              :key="movie.media_file_id" 
-              :movie-id="movie.media_file_id"
+              :key="mediaFile.id" 
+              :movie-id="mediaFile.id"
               @format-error="handleFormatError"
             />
           </div>
@@ -134,8 +124,8 @@
             </p>
           </div>
         </div>
-        <div v-else-if="showPlayer && !movie.media_file_id" class="mt-8 p-8 bg-gray-800 rounded-lg text-center text-gray-400">
-          <p>No media file associated with this movie.</p>
+        <div v-else-if="showPlayer && !mediaFile.id" class="mt-8 p-8 bg-gray-800 rounded-lg text-center text-gray-400">
+          <p>No media file associated.</p>
         </div>
       </div>
     </div>
@@ -159,7 +149,6 @@ import { media } from '@/api/client'
 const route = useRoute()
 const router = useRouter()
 const showPlayer = ref(false)
-const movie = ref(null)
 const mediaFile = ref(null)
 const loading = ref(false)
 const error = ref('')
@@ -170,18 +159,8 @@ async function loadMedia() {
   error.value = ''
   
   try {
-    // Load Movie first
-    movie.value = await media.getMovie(route.params.id)
-    
-    // If Movie has a media_file_id, load the MediaFile
-    if (movie.value?.media_file_id) {
-      try {
-        mediaFile.value = await media.getMediaFile(movie.value.media_file_id)
-      } catch (err) {
-        console.error('Failed to load media file:', err)
-        // Don't fail the whole page if MediaFile can't be loaded
-      }
-    }
+    // Load MediaFile first
+    mediaFile.value = await media.getMediaFile(route.params.id)
   } catch (err) {
     console.error('Failed to load media:', err)
     error.value = 'Failed to load media details. Please try again.'
@@ -234,6 +213,14 @@ function handlePlayClick() {
 
 function handleFormatError(errorData) {
   formatError.value = errorData
+}
+
+function getMediaTitle() {
+  if (!mediaFile.value) return ''
+  // Extract title from file_name by removing extension
+  const name = mediaFile.value.file_name
+  const lastDot = name.lastIndexOf('.')
+  return lastDot > 0 ? name.substring(0, lastDot) : name
 }
 
 onMounted(() => {
