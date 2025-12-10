@@ -103,7 +103,7 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { jobs as jobsApi, getAccessToken } from '@/api/client'
+import { jobs as jobsApi } from '@/api/client'
 
 const { t, locale } = useI18n()
 
@@ -115,9 +115,7 @@ const showSuccess = ref(false)
 const showError = ref(false)
 const successMessage = ref('')
 const errorMessage = ref('')
-const liveConnected = ref(false)
-const websocketRef = ref(null)
-let reconnectTimer = null
+let pollInterval = null
 
 // Date formatter using browser's Intl API
 function formatDate(dateString) {
@@ -182,14 +180,6 @@ function getStatusClass(status) {
   }
 }
 
-function upsertJob(jobUpdate) {
-  const existingIndex = jobs.value.findIndex(job => job.id === jobUpdate.id)
-  if (existingIndex !== -1) {
-    jobs.value[existingIndex] = { ...jobs.value[existingIndex], ...jobUpdate }
-  } else {
-    jobs.value = [...jobs.value, jobUpdate]
-  }
-}
 
 function addTriggering(jobId) {
   const next = new Set(triggeringJobs.value)
@@ -203,8 +193,10 @@ function removeTriggering(jobId) {
   triggeringJobs.value = next
 }
 
-async function loadJobs() {
-  loading.value = true
+async function loadJobs(showLoading = true) {
+  if (showLoading) {
+    loading.value = true
+  }
   error.value = ''
   try {
     jobs.value = await jobsApi.getJobs()
@@ -212,68 +204,26 @@ async function loadJobs() {
     console.error('Failed to load jobs:', err)
     error.value = err.data?.detail || t('jobs.loadFailed')
   } finally {
-    loading.value = false
-  }
-}
-
-function disconnectWebSocket() {
-  if (reconnectTimer) {
-    clearTimeout(reconnectTimer)
-    reconnectTimer = null
-  }
-  if (websocketRef.value) {
-    websocketRef.value.close()
-    websocketRef.value = null
-  }
-  liveConnected.value = false
-}
-
-function scheduleReconnect() {
-  if (reconnectTimer) {
-    return
-  }
-  reconnectTimer = setTimeout(() => {
-    reconnectTimer = null
-    connectWebSocket()
-  }, 3000)
-}
-
-function connectWebSocket() {
-  const token = getAccessToken()
-  if (!token) {
-    return
-  }
-
-  const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws'
-  const socketUrl = `${protocol}://${window.location.host}/api/v1/dashboard/jobs/ws?api_key=${encodeURIComponent(token)}`
-  const socket = new WebSocket(socketUrl)
-  websocketRef.value = socket
-
-  socket.onopen = () => {
-    liveConnected.value = true
-  }
-
-  socket.onclose = () => {
-    liveConnected.value = false
-    scheduleReconnect()
-  }
-
-  socket.onerror = () => {
-    liveConnected.value = false
-    socket.close()
-  }
-
-  socket.onmessage = event => {
-    try {
-      const payload = JSON.parse(event.data)
-      if (payload.type === 'snapshot' && Array.isArray(payload.jobs)) {
-        jobs.value = payload.jobs
-      } else if (payload.type === 'job_update' && payload.job) {
-        upsertJob(payload.job)
-      }
-    } catch (err) {
-      console.error('Failed to parse job update message:', err)
+    if (showLoading) {
+      loading.value = false
     }
+  }
+}
+
+function startPolling() {
+  // Poll every 2 seconds for job updates
+  if (pollInterval) {
+    return
+  }
+  pollInterval = setInterval(() => {
+    loadJobs(false) // Don't show loading spinner on polling updates
+  }, 2000)
+}
+
+function stopPolling() {
+  if (pollInterval) {
+    clearInterval(pollInterval)
+    pollInterval = null
   }
 }
 
@@ -284,13 +234,8 @@ async function triggerJob(jobId) {
 
   try {
     await jobsApi.triggerJob(jobId)
-    // Optimistically mark as running while the job executes
-    upsertJob({
-      id: jobId,
-      status: 'running',
-      running_since: new Date().toISOString(),
-      error: null,
-    })
+    // Reload jobs to get updated status
+    await loadJobs()
     successMessage.value = t('jobs.triggerSuccess')
     showSuccess.value = true
 
@@ -314,11 +259,11 @@ async function triggerJob(jobId) {
 
 onMounted(() => {
   loadJobs()
-  connectWebSocket()
+  startPolling()
 })
 
 onBeforeUnmount(() => {
-  disconnectWebSocket()
+  stopPolling()
 })
 </script>
 
