@@ -418,4 +418,11 @@ export const jobs = {
   async triggerJob(jobId) {
     return post(`/dashboard/jobs/${jobId}/trigger`);
   },
+
+  /**
+   * Cancel a running job (admin only)
+   */
+  async cancelJob(jobId) {
+    return post(`/dashboard/jobs/${jobId}/cancel`);
+  },
 };

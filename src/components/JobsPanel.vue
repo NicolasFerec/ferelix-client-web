@@ -114,6 +114,9 @@
                 {{ $t('jobs.duration') }}
               </th>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                {{ $t('jobs.progress') }}
+              </th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
                 {{ $t('jobs.statusLabel') }}
               </th>
             </tr>
@@ -134,17 +137,44 @@
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
                 {{ formatDuration(record.duration_seconds) }}
               </td>
-              <td class="px-6 py-4 whitespace-nowrap">
-                <span
-                  :class="[
-                    'px-2 inline-flex text-xs leading-5 font-semibold rounded-full',
-                    getHistoryStatusClass(record.status)
-                  ]"
-                >
-                  {{ getHistoryStatusLabel(record.status) }}
-                </span>
-                <div v-if="record.error" class="mt-1 text-xs text-red-400">
-                  {{ record.error }}
+              <td class="px-6 py-4 text-sm">
+                <div v-if="record.files_total">
+                  <div class="text-gray-300 mb-1">
+                    {{ record.files_processed || 0 }} / {{ record.files_total }} {{ $t('jobs.files') }}
+                  </div>
+                  <div class="w-full bg-gray-700 rounded-full h-2">
+                    <div 
+                      class="bg-indigo-600 h-2 rounded-full transition-all duration-300" 
+                      :style="{ width: ((record.files_processed || 0) / record.files_total * 100) + '%' }"
+                    >
+                    </div>
+                  </div>
+                </div>
+                <span v-else class="text-gray-500">-</span>
+              </td>
+              <td class="px-6 py-4">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <span
+                      :class="[
+                        'px-2 inline-flex text-xs leading-5 font-semibold rounded-full',
+                        getHistoryStatusClass(record.status)
+                      ]"
+                    >
+                      {{ getHistoryStatusLabel(record.status) }}
+                    </span>
+                    <div v-if="record.error" class="mt-1 text-xs text-red-400">
+                      {{ record.error }}
+                    </div>
+                  </div>
+                  <button
+                    v-if="record.status === 'running'"
+                    @click="cancelJob(record.job_id)"
+                    :disabled="cancellingJobs.has(record.job_id)"
+                    class="ml-4 px-3 py-1 bg-red-600 hover:bg-red-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded-md transition-colors text-xs"
+                  >
+                    {{ cancellingJobs.has(record.job_id) ? $t('jobs.cancelling') : $t('jobs.cancel') }}
+                  </button>
                 </div>
               </td>
             </tr>
@@ -183,6 +213,7 @@ const jobHistory = ref([])
 const loading = ref(false)
 const error = ref('')
 const triggeringJobs = ref(new Set())
+const cancellingJobs = ref(new Set())
 const showSuccess = ref(false)
 const showError = ref(false)
 const successMessage = ref('')
@@ -260,6 +291,18 @@ function getHistoryJobName(record) {
   return record?.job_name || record?.job_id || ''
 }
 
+function truncatePath(path, maxLength = 50) {
+  if (!path || path.length <= maxLength) {
+    return path
+  }
+  const parts = path.split('/')
+  if (parts.length <= 2) {
+    return path.substring(0, maxLength) + '...'
+  }
+  // Keep first and last parts, truncate middle
+  return parts[0] + '/.../' + parts[parts.length - 1]
+}
+
 function getStatusLabel(status) {
   switch (status) {
     case 'running':
@@ -268,6 +311,8 @@ function getStatusLabel(status) {
       return t('jobs.status.success')
     case 'failed':
       return t('jobs.status.failed')
+    case 'cancelled':
+      return t('jobs.status.cancelled')
     case 'pending':
     default:
       return t('jobs.status.pending')
@@ -282,6 +327,8 @@ function getStatusClass(status) {
       return 'bg-green-100 text-green-800'
     case 'failed':
       return 'bg-red-100 text-red-800'
+    case 'cancelled':
+      return 'bg-orange-100 text-orange-800'
     case 'pending':
     default:
       return 'bg-yellow-100 text-yellow-800'
@@ -296,6 +343,8 @@ function getHistoryStatusClass(status) {
       return 'bg-green-100 text-green-800'
     case 'failed':
       return 'bg-red-100 text-red-800'
+    case 'cancelled':
+      return 'bg-orange-100 text-orange-800'
     default:
       return 'bg-gray-100 text-gray-800'
   }
@@ -309,6 +358,8 @@ function getHistoryStatusLabel(status) {
       return t('jobs.status.completed')
     case 'failed':
       return t('jobs.status.failed')
+    case 'cancelled':
+      return t('jobs.status.cancelled')
     default:
       return status
   }
@@ -352,6 +403,18 @@ function removeTriggering(jobId) {
   const next = new Set(triggeringJobs.value)
   next.delete(jobId)
   triggeringJobs.value = next
+}
+
+function addCancelling(jobId) {
+  const next = new Set(cancellingJobs.value)
+  next.add(jobId)
+  cancellingJobs.value = next
+}
+
+function removeCancelling(jobId) {
+  const next = new Set(cancellingJobs.value)
+  next.delete(jobId)
+  cancellingJobs.value = next
 }
 
 async function loadJobs(showLoading = true) {
@@ -453,6 +516,36 @@ async function triggerJob(jobId) {
     }, 5000)
   } finally {
     removeTriggering(jobId)
+  }
+}
+
+async function cancelJob(jobId) {
+  addCancelling(jobId)
+  showSuccess.value = false
+  showError.value = false
+
+  try {
+    await jobsApi.cancelJob(jobId)
+    // Reload jobs to get updated status
+    await loadJobs()
+    successMessage.value = t('jobs.cancelSuccess')
+    showSuccess.value = true
+
+    // Hide success message after 3 seconds
+    setTimeout(() => {
+      showSuccess.value = false
+    }, 3000)
+  } catch (err) {
+    console.error('Failed to cancel job:', err)
+    errorMessage.value = err.data?.detail || t('jobs.cancelFailed')
+    showError.value = true
+
+    // Hide error message after 5 seconds
+    setTimeout(() => {
+      showError.value = false
+    }, 5000)
+  } finally {
+    removeCancelling(jobId)
   }
 }
 
