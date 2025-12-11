@@ -13,73 +13,144 @@
     <div v-else-if="error" class="text-center text-red-400 py-12">
       <p>{{ error }}</p>
       <button
-        @click="loadJobs"
+        @click="loadAll"
         class="mt-4 px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-md"
       >
         {{ $t('common.retry') }}
       </button>
     </div>
 
-    <!-- Empty state -->
-    <div v-else-if="jobs.length === 0" class="text-center text-gray-400 py-12">
-      <p>{{ $t('jobs.noJobs') }}</p>
+    <!-- Scheduled Jobs Section -->
+    <div v-else class="mb-8">
+      <h3 class="text-xl font-semibold text-white mb-4">{{ $t('jobs.scheduled') }}</h3>
+      
+      <!-- Empty state -->
+      <div v-if="jobs.length === 0" class="text-center text-gray-400 py-12 bg-gray-800 rounded-lg">
+        <p>{{ $t('jobs.noJobs') }}</p>
+      </div>
+
+      <!-- Jobs table -->
+      <div v-else class="bg-gray-800 rounded-lg overflow-hidden">
+        <table class="min-w-full divide-y divide-gray-700">
+          <thead class="bg-gray-700">
+            <tr>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                {{ $t('jobs.name') }}
+              </th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                {{ $t('jobs.lastRun') }}
+              </th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                {{ $t('jobs.nextRun') }}
+              </th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                {{ $t('jobs.statusLabel') }}
+              </th>
+              <th class="px-6 py-3 text-right text-xs font-medium text-gray-300 uppercase tracking-wider">
+                {{ $t('jobs.actions') }}
+              </th>
+            </tr>
+          </thead>
+          <tbody class="bg-gray-800 divide-y divide-gray-700">
+            <tr v-for="job in jobs" :key="job.id" class="hover:bg-gray-750">
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">
+                {{ getJobName(job) }}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                {{ formatDate(job.last_run_time) }}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                {{ formatDate(job.next_run_time) }}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <span
+                  :class="[
+                    'px-2 inline-flex text-xs leading-5 font-semibold rounded-full',
+                    getStatusClass(job.status)
+                  ]"
+                >
+                  {{ getStatusLabel(job.status) }}
+                </span>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                <button
+                  @click="triggerJob(job.id)"
+                  :disabled="triggeringJobs.has(job.id)"
+                  class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded-md transition-colors text-sm"
+                >
+                  {{ triggeringJobs.has(job.id) ? $t('jobs.triggering') : $t('jobs.trigger') }}
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
-    <!-- Jobs table -->
-    <div v-else class="bg-gray-800 rounded-lg overflow-hidden">
-      <table class="min-w-full divide-y divide-gray-700">
-        <thead class="bg-gray-700">
-          <tr>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-              {{ $t('jobs.name') }}
-            </th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-              {{ $t('jobs.lastRun') }}
-            </th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-              {{ $t('jobs.nextRun') }}
-            </th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
-              {{ $t('jobs.statusLabel') }}
-            </th>
-            <th class="px-6 py-3 text-right text-xs font-medium text-gray-300 uppercase tracking-wider">
-              {{ $t('jobs.actions') }}
-            </th>
-          </tr>
-        </thead>
-        <tbody class="bg-gray-800 divide-y divide-gray-700">
-          <tr v-for="job in jobs" :key="job.id" class="hover:bg-gray-750">
-            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">
-              {{ getJobName(job) }}
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-              {{ formatDate(job.last_run_time) }}
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-              {{ formatDate(job.next_run_time) }}
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap">
-              <span
-                :class="[
-                  'px-2 inline-flex text-xs leading-5 font-semibold rounded-full',
-                  getStatusClass(job.status)
-                ]"
-              >
-                {{ getStatusLabel(job.status) }}
-              </span>
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-              <button
-                @click="triggerJob(job.id)"
-                :disabled="triggeringJobs.has(job.id)"
-                class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded-md transition-colors text-sm"
-              >
-                {{ triggeringJobs.has(job.id) ? $t('jobs.triggering') : $t('jobs.trigger') }}
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <!-- Job History Section -->
+    <div>
+      <h3 class="text-xl font-semibold text-white mb-4">{{ $t('jobs.history') }}</h3>
+      
+      <!-- Empty state -->
+      <div v-if="jobHistory.length === 0" class="text-center text-gray-400 py-12 bg-gray-800 rounded-lg">
+        <p>{{ $t('jobs.noHistory') }}</p>
+      </div>
+
+      <!-- History table -->
+      <div v-else class="bg-gray-800 rounded-lg overflow-hidden">
+        <table class="min-w-full divide-y divide-gray-700">
+          <thead class="bg-gray-700">
+            <tr>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                {{ $t('jobs.name') }}
+              </th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                {{ $t('jobs.typeLabel') }}
+              </th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                {{ $t('jobs.startedAt') }}
+              </th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                {{ $t('jobs.duration') }}
+              </th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                {{ $t('jobs.statusLabel') }}
+              </th>
+            </tr>
+          </thead>
+          <tbody class="bg-gray-800 divide-y divide-gray-700">
+            <tr v-for="record in jobHistory" :key="record.job_id" class="hover:bg-gray-750">
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">
+                {{ getHistoryJobName(record) }}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                <span class="px-2 py-1 rounded text-xs bg-gray-700 text-gray-300">
+                  {{ getJobTypeLabel(record.job_type) }}
+                </span>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                {{ formatDate(record.started_at) }}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                {{ formatDuration(record.duration_seconds) }}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <span
+                  :class="[
+                    'px-2 inline-flex text-xs leading-5 font-semibold rounded-full',
+                    getHistoryStatusClass(record.status)
+                  ]"
+                >
+                  {{ getHistoryStatusLabel(record.status) }}
+                </span>
+                <div v-if="record.error" class="mt-1 text-xs text-red-400">
+                  {{ record.error }}
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <!-- Success notification -->
@@ -108,6 +179,7 @@ import { jobs as jobsApi } from '@/api/client'
 const { t, locale } = useI18n()
 
 const jobs = ref([])
+const jobHistory = ref([])
 const loading = ref(false)
 const error = ref('')
 const triggeringJobs = ref(new Set())
@@ -143,6 +215,11 @@ function formatDate(dateString) {
 }
 
 function getJobName(job) {
+  // For scan library jobs, prefer the fallback name which includes library name
+  if (job?.name_key === 'jobs.names.scan_library' && job?.name) {
+    return job.name
+  }
+  
   if (job?.name_key) {
     const translated = t(job.name_key)
     if (translated && translated !== job.name_key) {
@@ -150,6 +227,37 @@ function getJobName(job) {
     }
   }
   return job?.name || job?.id || ''
+}
+
+function getHistoryJobName(record) {
+  // For scan library jobs, extract library name/ID and format with translated base name
+  // Note: library name itself should NOT be translated, only the base "Library Scanner" part
+  if (record?.name_key === 'jobs.names.scan_library' && record?.job_name) {
+    // Extract library identifier from job_name (format: "Library Scanner: {name_or_id}")
+    // This works for both English "Library Scanner: Films" and other languages
+    const match = record.job_name.match(/^Library Scanner:\s*(.+)$/)
+    if (match) {
+      const libraryIdentifier = match[1] // Keep library name as-is, don't translate
+      const translatedBase = t(record.name_key)
+      return `${translatedBase}: ${libraryIdentifier}`
+    }
+    // Also try to match if it's already in translated format (e.g., "Analyseur de bibliothèque: Films")
+    const translatedMatch = record.job_name.match(/^(.+?):\s*(.+)$/)
+    if (translatedMatch) {
+      // Already has translated format, return as-is
+      return record.job_name
+    }
+    // Fallback: use the job_name as-is if pattern doesn't match
+    return record.job_name
+  }
+  
+  if (record?.name_key) {
+    const translated = t(record.name_key)
+    if (translated && translated !== record.name_key) {
+      return translated
+    }
+  }
+  return record?.job_name || record?.job_id || ''
 }
 
 function getStatusLabel(status) {
@@ -177,6 +285,59 @@ function getStatusClass(status) {
     case 'pending':
     default:
       return 'bg-yellow-100 text-yellow-800'
+  }
+}
+
+function getHistoryStatusClass(status) {
+  switch (status) {
+    case 'running':
+      return 'bg-blue-100 text-blue-800'
+    case 'completed':
+      return 'bg-green-100 text-green-800'
+    case 'failed':
+      return 'bg-red-100 text-red-800'
+    default:
+      return 'bg-gray-100 text-gray-800'
+  }
+}
+
+function getHistoryStatusLabel(status) {
+  switch (status) {
+    case 'running':
+      return t('jobs.status.running')
+    case 'completed':
+      return t('jobs.status.completed')
+    case 'failed':
+      return t('jobs.status.failed')
+    default:
+      return status
+  }
+}
+
+function getJobTypeLabel(type) {
+  if (type === 'scheduled') {
+    return t('jobs.type.scheduled')
+  } else if (type === 'one-off') {
+    return t('jobs.type.oneOff')
+  }
+  return type
+}
+
+function formatDuration(seconds) {
+  if (seconds === null || seconds === undefined) {
+    return '-'
+  }
+  
+  if (seconds < 60) {
+    return `${Math.round(seconds)}s`
+  } else if (seconds < 3600) {
+    const mins = Math.floor(seconds / 60)
+    const secs = Math.round(seconds % 60)
+    return `${mins}m ${secs}s`
+  } else {
+    const hours = Math.floor(seconds / 3600)
+    const mins = Math.floor((seconds % 3600) / 60)
+    return `${hours}h ${mins}m`
   }
 }
 
@@ -210,6 +371,43 @@ async function loadJobs(showLoading = true) {
   }
 }
 
+async function loadJobHistory(showLoading = true) {
+  if (showLoading) {
+    loading.value = true
+  }
+  error.value = ''
+  try {
+    jobHistory.value = await jobsApi.getJobHistory()
+  } catch (err) {
+    console.error('Failed to load job history:', err)
+    // Don't set error for history failures, just log
+  } finally {
+    if (showLoading) {
+      loading.value = false
+    }
+  }
+}
+
+async function loadAll(showLoading = true) {
+  if (showLoading) {
+    loading.value = true
+  }
+  error.value = ''
+  try {
+    await Promise.all([
+      loadJobs(false),
+      loadJobHistory(false)
+    ])
+  } catch (err) {
+    console.error('Failed to load data:', err)
+    error.value = err.data?.detail || t('jobs.loadFailed')
+  } finally {
+    if (showLoading) {
+      loading.value = false
+    }
+  }
+}
+
 function startPolling() {
   // Poll every 2 seconds for job updates
   if (pollInterval) {
@@ -217,6 +415,7 @@ function startPolling() {
   }
   pollInterval = setInterval(() => {
     loadJobs(false) // Don't show loading spinner on polling updates
+    loadJobHistory(false)
   }, 2000)
 }
 
@@ -258,7 +457,7 @@ async function triggerJob(jobId) {
 }
 
 onMounted(() => {
-  loadJobs()
+  loadAll()
   startPolling()
 })
 

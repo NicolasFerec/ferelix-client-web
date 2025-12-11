@@ -27,7 +27,10 @@
         </div>
         <div v-else>
           <div v-for="library in libraries" :key="library.id" class="mb-12">
-            <h3 class="text-xl font-semibold mb-4 text-white">{{ library.path }}</h3>
+            <h3 class="text-xl font-semibold mb-4 text-white">
+              {{ library.name }}
+              <span class="text-sm text-gray-400 font-normal ml-2">{{ library.path }}</span>
+            </h3>
             <div v-if="mediaFilesByLibrary[library.id] && mediaFilesByLibrary[library.id].length > 0" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
               <MediaCard
                 v-for="mediaFile in mediaFilesByLibrary[library.id]"

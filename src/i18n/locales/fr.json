@@ -65,6 +65,7 @@
     "edit": "Modifier la bibliothèque",
     "delete": "Supprimer la bibliothèque",
     "confirmDelete": "Êtes-vous sûr de vouloir supprimer cette bibliothèque ?",
+    "name": "Nom",
     "path": "Chemin",
     "typeLabel": "Type",
     "type": {
@@ -78,23 +79,37 @@
     "createFailed": "Échec de la création de la bibliothèque",
     "updateFailed": "Échec de la mise à jour de la bibliothèque",
     "deleteFailed": "Échec de la suppression de la bibliothèque",
+    "nameRequired": "Le nom est requis",
     "pathRequired": "Le chemin est requis",
     "pathExists": "Le chemin de bibliothèque existe déjà",
     "noLibraries": "Aucune bibliothèque configurée",
-    "loadFailed": "Échec du chargement des bibliothèques"
+    "loadFailed": "Échec du chargement des bibliothèques",
+    "actions": {
+      "scan": "Scanner",
+      "edit": "Modifier",
+      "delete": "Supprimer"
+    },
+    "scanStarted": "Analyse de la bibliothèque démarrée. Consultez le panneau Tâches pour suivre la progression.",
+    "scanFailed": "Échec du démarrage de l'analyse de la bibliothèque"
   },
   "home": {
     "library": "Bibliothèque",
     "noItems": "Aucun élément trouvé. Ajoutez des chemins de bibliothèque pour scanner les médias.",
     "noLibraries": "Aucune bibliothèque configurée pour le moment",
-    "loadingMovies": "Chargement de la bibliothèque...",
+    "loadingMediaFiles": "Chargement des fichiers multimédias...",
     "loadFailed": "Échec du chargement de la bibliothèque. Veuillez réessayer."
   },
   "jobs": {
     "title": "Tâches planifiées",
+    "scheduled": "Tâches planifiées",
+    "history": "Historique des tâches",
     "name": "Nom",
+    "type": "Type",
+    "typeLabel": "Type",
     "lastRun": "Dernière exécution",
     "nextRun": "Prochaine exécution",
+    "startedAt": "Démarré",
+    "duration": "Durée",
     "statusLabel": "Statut",
     "actions": "Actions",
     "trigger": "Déclencher",
@@ -103,16 +118,24 @@
     "triggerFailed": "Échec du déclenchement de la tâche",
     "loadFailed": "Échec du chargement des tâches",
     "noJobs": "Aucune tâche planifiée trouvée",
+    "noHistory": "Aucun historique de tâches disponible",
     "status": {
       "pending": "En attente",
       "running": "En cours",
       "success": "Terminée",
+      "completed": "Terminée",
       "failed": "Échec",
       "neverRun": "Jamais exécutée"
     },
+    "type": {
+      "scheduled": "Planifiée",
+      "oneOff": "Ponctuelle"
+    },
     "neverRun": "Jamais",
     "names": {
-      "library_scanner": "Analyseur de bibliothèque"
+      "library_scanner": "Analyseur de bibliothèque",
+      "cleanup_deleted_media": "Nettoyage des médias supprimés",
+      "scan_library": "Analyseur de bibliothèque"
     }
   }
 }

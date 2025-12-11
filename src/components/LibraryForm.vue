@@ -7,6 +7,20 @@
 
       <form @submit.prevent="handleSubmit">
         <div class="space-y-4">
+          <!-- Name -->
+          <div>
+            <label class="block text-sm font-medium text-gray-300 mb-2">
+              {{ $t('libraries.name') }}
+            </label>
+            <input
+              v-model="form.name"
+              type="text"
+              required
+              class="w-full px-3 py-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              placeholder="My Library"
+            />
+          </div>
+
           <!-- Path -->
           <div>
             <label class="block text-sm font-medium text-gray-300 mb-2">
@@ -93,6 +107,7 @@ const emit = defineEmits(['close', 'saved'])
 const { t } = useI18n()
 
 const form = ref({
+  name: '',
   path: '',
   library_type: 'movie',
   enabled: true
@@ -105,12 +120,14 @@ const error = ref('')
 watch(() => props.library, (library) => {
   if (library) {
     form.value = {
+      name: library.name || '',
       path: library.path,
       library_type: library.library_type || 'movie',
       enabled: library.enabled
     }
   } else {
     form.value = {
+      name: '',
       path: '',
       library_type: 'movie',
       enabled: true
@@ -120,6 +137,10 @@ watch(() => props.library, (library) => {
 }, { immediate: true })
 
 async function handleSubmit() {
+  if (!form.value.name.trim()) {
+    error.value = t('libraries.nameRequired')
+    return
+  }
   if (!form.value.path.trim()) {
     error.value = t('libraries.pathRequired')
     return
@@ -132,6 +153,7 @@ async function handleSubmit() {
     if (props.library) {
       // Update existing library
       await libraryApi.updateLibrary(props.library.id, {
+        name: form.value.name,
         path: form.value.path,
         library_type: form.value.library_type,
         enabled: form.value.enabled
@@ -139,6 +161,7 @@ async function handleSubmit() {
     } else {
       // Create new library
       await libraryApi.createLibrary(
+        form.value.name,
         form.value.path,
         form.value.library_type,
         form.value.enabled

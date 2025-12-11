@@ -40,10 +40,13 @@
     </div>
 
     <!-- Libraries table -->
-    <div v-else class="bg-gray-800 rounded-lg overflow-hidden">
+    <div v-else class="bg-gray-800 rounded-lg overflow-visible">
       <table class="min-w-full divide-y divide-gray-700">
         <thead class="bg-gray-700">
           <tr>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider rounded-tl-lg">
+              {{ $t('libraries.name') }}
+            </th>
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
               {{ $t('libraries.path') }}
             </th>
@@ -53,7 +56,7 @@
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
               {{ $t('libraries.enabled') }}
             </th>
-            <th class="px-6 py-3 text-right text-xs font-medium text-gray-300 uppercase tracking-wider">
+            <th class="px-6 py-3 text-right text-xs font-medium text-gray-300 uppercase tracking-wider rounded-tr-lg">
               {{ $t('common.actions') }}
             </th>
           </tr>
@@ -65,6 +68,7 @@
             :library="library"
             @edit="handleEdit"
             @delete="handleDelete"
+            @scan="handleScan"
           />
         </tbody>
       </table>
@@ -120,6 +124,11 @@ async function handleDelete(library) {
   }
 }
 
+function handleScan(library) {
+  // Show success message - scan is async, user can check Jobs panel for progress
+  alert(t('libraries.scanStarted'))
+}
+
 function handleSaved() {
   showForm.value = false
   editingLibrary.value = null
@@ -130,3 +139,13 @@ onMounted(() => {
   loadLibraries()
 })
 </script>
+
+<style scoped>
+.library-list tbody tr:last-child td:first-child {
+  border-bottom-left-radius: 0.5rem;
+}
+
+.library-list tbody tr:last-child td:last-child {
+  border-bottom-right-radius: 0.5rem;
+}
+</style>

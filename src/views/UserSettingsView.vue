@@ -54,7 +54,6 @@
               v-model="formData.email"
               name="email"
               type="email"
-              required
               class="appearance-none relative block w-full px-3 py-2 border border-gray-700 placeholder-gray-500 text-white bg-gray-800 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             />
           </div>
@@ -178,7 +177,7 @@ async function handleSubmit() {
   try {
     const updateData = {
       username: formData.value.username,
-      email: formData.value.email,
+      email: formData.value.email || null,
       language: formData.value.language
     }
     

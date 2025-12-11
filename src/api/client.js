@@ -356,8 +356,8 @@ export const libraries = {
   /**
    * Create a new library
    */
-  async createLibrary(path, libraryType = 'movie', enabled = true) {
-    return post('/dashboard/libraries', { path, library_type: libraryType, enabled });
+  async createLibrary(name, path, libraryType = 'movie', enabled = true) {
+    return post('/dashboard/libraries', { name, path, library_type: libraryType, enabled });
   },
 
   /**
@@ -373,6 +373,13 @@ export const libraries = {
   async deleteLibrary(id) {
     return del(`/dashboard/libraries/${id}`);
   },
+
+  /**
+   * Trigger a scan for a specific library (admin only)
+   */
+  async scanLibrary(libraryId) {
+    return post(`/dashboard/libraries/${libraryId}/scan`);
+  },
 };
 
 // Export job-related functions
@@ -382,6 +389,13 @@ export const jobs = {
    */
   async getJobs() {
     return get('/dashboard/jobs');
+  },
+
+  /**
+   * Get job execution history (admin only)
+   */
+  async getJobHistory() {
+    return get('/dashboard/jobs/history');
   },
 
   /**
