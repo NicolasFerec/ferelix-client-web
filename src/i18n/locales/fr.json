@@ -1,5 +1,5 @@
 {
-  "common": {
+    "common": {
     "appName": "Ferelix",
     "logout": "Déconnexion",
     "settings": "Paramètres",
@@ -16,7 +16,9 @@
     "confirm": "Confirmer",
     "enabled": "Activé",
     "disabled": "Désactivé",
-    "actions": "Actions"
+    "actions": "Actions",
+    "go": "Aller",
+    "select": "Sélectionner"
   },
   "login": {
     "title": "Connexion à Ferelix",
@@ -90,7 +92,15 @@
       "delete": "Supprimer"
     },
     "scanStarted": "Analyse de la bibliothèque démarrée. Consultez le panneau Tâches pour suivre la progression.",
-    "scanFailed": "Échec du démarrage de l'analyse de la bibliothèque"
+    "scanFailed": "Échec du démarrage de l'analyse de la bibliothèque",
+    "browse": "Parcourir",
+    "browseDirectory": "Parcourir le répertoire",
+    "enterPath": "Entrer le chemin",
+    "emptyDirectory": "Ce répertoire est vide",
+    "browseError": "Échec de la navigation dans le répertoire",
+    "goBack": "Retour",
+    "goForward": "Avancer",
+    "goUp": "Remonter d'un niveau"
   },
   "home": {
     "library": "Bibliothèque",

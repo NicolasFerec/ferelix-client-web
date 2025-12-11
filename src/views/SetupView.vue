@@ -79,10 +79,12 @@ import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { auth } from '@/api/client';
+import { useUser } from '@/composables/useUser';
 
 const { t } = useI18n();
 
 const router = useRouter();
+const { loadUser } = useUser();
 
 const username = ref('');
 const password = ref('');
@@ -123,7 +125,9 @@ async function handleSetup() {
 
   try {
     await auth.createAdmin(username.value, password.value, browserLanguage.value);
-    router.push('/login');  
+    // Load user data so the menu bar shows the dashboard button
+    await loadUser();
+    router.push('/');  
   } catch (err) {
     console.error('Setup failed:', err);
     error.value = err.data?.detail || t('setup.failed');

@@ -1,5 +1,5 @@
 {
-  "common": {
+    "common": {
     "appName": "Ferelix",
     "logout": "Logout",
     "settings": "Settings",
@@ -16,7 +16,9 @@
     "confirm": "Confirm",
     "enabled": "Enabled",
     "disabled": "Disabled",
-    "actions": "Actions"
+    "actions": "Actions",
+    "go": "Go",
+    "select": "Select"
   },
   "login": {
     "title": "Sign in to Ferelix",
@@ -90,7 +92,15 @@
       "delete": "Delete"
     },
     "scanStarted": "Library scan started. Check the Jobs panel to monitor progress.",
-    "scanFailed": "Failed to start library scan"
+    "scanFailed": "Failed to start library scan",
+    "browse": "Browse",
+    "browseDirectory": "Browse Directory",
+    "enterPath": "Enter path",
+    "emptyDirectory": "This directory is empty",
+    "browseError": "Failed to browse directory",
+    "goBack": "Go back",
+    "goForward": "Go forward",
+    "goUp": "Go up one directory"
   },
   "home": {
     "library": "Library",

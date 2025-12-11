@@ -296,13 +296,20 @@ export const auth = {
    * Create admin account (first-time setup)
    */
   async createAdmin(username, password, language = 'en') {
-    return publicRequest(`${API_BASE}/setup/admin`, {
+    const data = await publicRequest(`${API_BASE}/setup/admin`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ username, password, language }),
     });
+    
+    // Save tokens if returned (for auto-login after setup)
+    if (data.access_token && data.refresh_token) {
+      saveTokens(data.access_token, data.refresh_token);
+    }
+    
+    return data;
   },
 
   /**
@@ -379,6 +386,13 @@ export const libraries = {
    */
   async scanLibrary(libraryId) {
     return post(`/dashboard/libraries/${libraryId}/scan`);
+  },
+
+  /**
+   * Browse directories at a given path (admin only)
+   */
+  async browseDirectory(path) {
+    return get(`/dashboard/browse?path=${encodeURIComponent(path)}`);
   },
 };
 

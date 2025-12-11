@@ -26,13 +26,23 @@
             <label class="block text-sm font-medium text-gray-300 mb-2">
               {{ $t('libraries.path') }}
             </label>
-            <input
-              v-model="form.path"
-              type="text"
-              required
-              class="w-full px-3 py-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              placeholder="/path/to/library"
-            />
+            <div class="flex space-x-2">
+              <input
+                v-model="form.path"
+                type="text"
+                required
+                class="flex-1 px-3 py-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                placeholder="/path/to/library"
+              />
+              <button
+                type="button"
+                @click="showBrowser = true"
+                class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-md transition-colors text-sm font-medium"
+                :title="$t('libraries.browse')"
+              >
+                {{ $t('libraries.browse') }}
+              </button>
+            </div>
           </div>
 
           <!-- Library Type -->
@@ -87,6 +97,14 @@
         </div>
       </form>
     </div>
+
+    <!-- Directory Browser -->
+    <DirectoryBrowser
+      v-if="showBrowser"
+      :initial-path="form.path"
+      @close="showBrowser = false"
+      @select="handlePathSelect"
+    />
   </div>
 </template>
 
@@ -94,6 +112,7 @@
 import { ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { libraries as libraryApi } from '@/api/client'
+import DirectoryBrowser from './DirectoryBrowser.vue'
 
 const props = defineProps({
   library: {
@@ -115,6 +134,7 @@ const form = ref({
 
 const loading = ref(false)
 const error = ref('')
+const showBrowser = ref(false)
 
 // Initialize form with library data if editing
 watch(() => props.library, (library) => {
@@ -174,5 +194,10 @@ async function handleSubmit() {
   } finally {
     loading.value = false
   }
+}
+
+function handlePathSelect(path) {
+  form.value.path = path
+  showBrowser.value = false
 }
 </script>

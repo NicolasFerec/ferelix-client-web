@@ -117,7 +117,7 @@ import { auth } from '@/api/client'
 import { useUser } from '@/composables/useUser'
 
 const router = useRouter()
-const { isAdmin, clearUser } = useUser()
+const { isAdmin, clearUser, loadUser } = useUser()
 const isDropdownOpen = ref(false)
 const dropdownContainer = ref(null)
 
@@ -143,9 +143,11 @@ function handleEscape(event) {
   }
 }
 
-onMounted(() => {
+onMounted(async () => {
   document.addEventListener('click', handleClickOutside)
   document.addEventListener('keydown', handleEscape)
+  // Load user data if authenticated but not yet loaded
+  await loadUser()
 })
 
 onUnmounted(() => {
