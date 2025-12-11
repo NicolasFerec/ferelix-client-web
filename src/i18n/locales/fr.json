@@ -152,7 +152,7 @@
     "neverRun": "Jamais",
     "names": {
       "library_scanner": "Analyseur de bibliothèque",
-      "cleanup_deleted_media": "Nettoyage des médias supprimés",
+      "database_maintenance": "Maintenance de la base de données",
       "scan_library": "Analyseur de bibliothèque"
     }
   },

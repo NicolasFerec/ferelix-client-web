@@ -152,7 +152,7 @@
     "neverRun": "Never",
     "names": {
       "library_scanner": "Library Scanner",
-      "cleanup_deleted_media": "Cleanup Deleted Media",
+      "database_maintenance": "Database Maintenance",
       "scan_library": "Scan Library"
     }
   },
