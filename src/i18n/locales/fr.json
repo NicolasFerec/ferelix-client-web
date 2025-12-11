@@ -59,6 +59,7 @@
     "users": "Utilisateurs",
     "settings": "Paramètres",
     "jobs": "Tâches",
+    "about": "À propos",
     "comingSoon": "Bientôt disponible..."
   },
   "libraries": {
@@ -154,6 +155,14 @@
       "cleanup_deleted_media": "Nettoyage des médias supprimés",
       "scan_library": "Analyseur de bibliothèque"
     }
+  },
+  "about": {
+    "title": "À propos de Ferelix",
+    "backend": "Backend",
+    "frontend": "Frontend",
+    "commit": "Commit",
+    "branch": "Branche",
+    "loadFailed": "Échec du chargement des informations de version"
   }
 }
 

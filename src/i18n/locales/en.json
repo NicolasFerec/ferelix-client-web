@@ -59,6 +59,7 @@
     "users": "Users",
     "settings": "Settings",
     "jobs": "Jobs",
+    "about": "About",
     "comingSoon": "Coming soon..."
   },
   "libraries": {
@@ -154,6 +155,14 @@
       "cleanup_deleted_media": "Cleanup Deleted Media",
       "scan_library": "Scan Library"
     }
+  },
+  "about": {
+    "title": "About Ferelix",
+    "backend": "Backend",
+    "frontend": "Frontend",
+    "commit": "Commit",
+    "branch": "Branch",
+    "loadFailed": "Failed to load version information"
   }
 }
 

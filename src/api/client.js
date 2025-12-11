@@ -426,3 +426,13 @@ export const jobs = {
     return post(`/dashboard/jobs/${jobId}/cancel`);
   },
 };
+
+// Export dashboard-related functions
+export const dashboard = {
+  /**
+   * Get version information (admin only)
+   */
+  async getVersionInfo() {
+    return get('/dashboard/version');
+  },
+};

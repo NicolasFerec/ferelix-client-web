@@ -4,8 +4,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
+    "generate-version": "node scripts/generate-version.js",
+    "dev": "pnpm generate-version && vite",
+    "build": "pnpm generate-version && vite build",
     "build:tizen": "node tizen/build.js",
     "clean": "rimraf dist",
     "preview": "vite preview"

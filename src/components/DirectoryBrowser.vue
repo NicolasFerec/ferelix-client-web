@@ -238,3 +238,4 @@ onMounted(() => {
   loadDirectory(initialPath, false)
 })
 </script>
+

@@ -62,6 +62,19 @@
                 {{ $t('dashboard.settings') }}
               </button>
             </li>
+            <li>
+              <button
+                @click="activeSection = 'about'"
+                :class="[
+                  'w-full text-left px-4 py-2 rounded-md transition-colors',
+                  activeSection === 'about'
+                    ? 'bg-indigo-600 text-white'
+                    : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+                ]"
+              >
+                {{ $t('dashboard.about') }}
+              </button>
+            </li>
           </ul>
         </nav>
       </aside>
@@ -70,6 +83,7 @@
       <main class="flex-1 overflow-y-auto p-8">
         <LibraryList v-if="activeSection === 'libraries'" />
         <JobsPanel v-else-if="activeSection === 'jobs'" />
+        <About v-else-if="activeSection === 'about'" />
         <div v-else class="text-center text-gray-400 py-12">
           {{ $t('dashboard.comingSoon') }}
         </div>
@@ -83,6 +97,7 @@ import { ref } from 'vue'
 import MenuBar from '../components/MenuBar.vue'
 import LibraryList from '../components/LibraryList.vue'
 import JobsPanel from '../components/JobsPanel.vue'
+import About from '../components/About.vue'
 
 const activeSection = ref('libraries')
 </script>

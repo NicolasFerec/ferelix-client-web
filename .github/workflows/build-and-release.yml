@@ -29,6 +29,12 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
+      # --- Generate version info ---
+      - name: Generate version info
+        run: |
+          echo '{"commit":"${{ github.sha }}","branch":"${{ github.ref_name }}"}' > src/utils/version.json
+          cat src/utils/version.json
+
       - name: Build project
         run: pnpm build
 
