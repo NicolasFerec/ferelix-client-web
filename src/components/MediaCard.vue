@@ -1,6 +1,6 @@
 <template>
   <div
-    class="media-card aspect-[2/3] cursor-pointer transform transition-all duration-300 hover:scale-105 hover:z-10"
+    class="media-card aspect-[2/3] cursor-pointer hover:z-10"
     @click="handleClick"
   >
     <div class="relative w-full h-full overflow-hidden rounded-lg bg-gray-800 shadow-lg">

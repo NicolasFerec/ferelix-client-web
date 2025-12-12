@@ -5,6 +5,7 @@ import LoginView from '../views/LoginView.vue'
 import SetupView from '../views/SetupView.vue'
 import UserSettingsView from '../views/UserSettingsView.vue'
 import DashboardView from '../views/DashboardView.vue'
+import LibraryView from '../views/LibraryView.vue'
 import { isAuthenticated, auth } from '@/api/client'
 
 const router = createRouter({
@@ -19,6 +20,12 @@ const router = createRouter({
       path: '/media/:id',
       name: 'media-detail',
       component: MediaDetailView,
+      props: true
+    },
+    {
+      path: '/library/:id',
+      name: 'library',
+      component: LibraryView,
       props: true
     },
     {

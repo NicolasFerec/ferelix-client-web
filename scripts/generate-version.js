@@ -26,3 +26,6 @@ const versionInfo = getGitInfo();
 const outputPath = join(__dirname, '../src/utils/version.json');
 writeFileSync(outputPath, JSON.stringify(versionInfo, null, 2));
 console.log(`Generated ${outputPath}:`, versionInfo);
+
+
+

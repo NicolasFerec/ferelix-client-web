@@ -394,6 +394,20 @@ export const libraries = {
   async browseDirectory(path) {
     return get(`/dashboard/browse?path=${encodeURIComponent(path)}`);
   },
+
+  /**
+   * Get homepage rows
+   */
+  async getHomepageRows() {
+    return get('/homepage/rows');
+  },
+
+  /**
+   * Get rows for a specific library
+   */
+  async getLibraryRows(libraryId) {
+    return get(`/libraries/${libraryId}/rows`);
+  },
 };
 
 // Export job-related functions
@@ -434,5 +448,71 @@ export const dashboard = {
    */
   async getVersionInfo() {
     return get('/dashboard/version');
+  },
+};
+
+// Export recommendation row-related functions
+export const recommendationRows = {
+  /**
+   * Get all recommendation rows (admin only)
+   */
+  async getRows(skip = 0, limit = 100) {
+    return get(`/dashboard/recommendation-rows?skip=${skip}&limit=${limit}`);
+  },
+
+  /**
+   * Get recommendation row by ID (admin only)
+   */
+  async getRow(id) {
+    return get(`/dashboard/recommendation-rows/${id}`);
+  },
+
+  /**
+   * Create a new recommendation row (admin only)
+   */
+  async createRow(data) {
+    return post('/dashboard/recommendation-rows', data);
+  },
+
+  /**
+   * Update a recommendation row (admin only)
+   */
+  async updateRow(id, data) {
+    return patch(`/dashboard/recommendation-rows/${id}`, data);
+  },
+
+  /**
+   * Delete a recommendation row (admin only)
+   */
+  async deleteRow(id) {
+    return del(`/dashboard/recommendation-rows/${id}`);
+  },
+
+  /**
+   * Get recommendation rows for a library (admin only)
+   */
+  async getLibraryRows(libraryId) {
+    return get(`/dashboard/libraries/${libraryId}/recommendation-rows`);
+  },
+
+  /**
+   * Add a recommendation row to a library (admin only)
+   */
+  async addLibraryRow(libraryId, data) {
+    return post(`/dashboard/libraries/${libraryId}/recommendation-rows`, data);
+  },
+
+  /**
+   * Update a recommendation row's visibility for a library (admin only)
+   */
+  async updateLibraryRow(libraryId, rowId, data) {
+    return patch(`/dashboard/libraries/${libraryId}/recommendation-rows/${rowId}`, data);
+  },
+
+  /**
+   * Remove a recommendation row from a library (admin only)
+   */
+  async removeLibraryRow(libraryId, rowId) {
+    return del(`/dashboard/libraries/${libraryId}/recommendation-rows/${rowId}`);
   },
 };

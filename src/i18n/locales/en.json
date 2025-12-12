@@ -18,7 +18,8 @@
     "disabled": "Disabled",
     "actions": "Actions",
     "go": "Go",
-    "select": "Select"
+    "select": "Select",
+    "optional": "Optional"
   },
   "login": {
     "title": "Sign in to Ferelix",
@@ -56,6 +57,7 @@
   "dashboard": {
     "title": "Dashboard",
     "libraries": "Libraries",
+    "recommendationRows": "Recommendation Rows",
     "users": "Users",
     "settings": "Settings",
     "jobs": "Jobs",
@@ -94,6 +96,10 @@
     },
     "scanStarted": "Library scan started. Check the Jobs panel to monitor progress.",
     "scanFailed": "Failed to start library scan",
+    "manageRecommendations": "Manage Recommendations",
+    "recommendationRows": "Recommendation Rows",
+    "expand": "Expand",
+    "collapse": "Collapse",
     "browse": "Browse",
     "browseDirectory": "Browse Directory",
     "enterPath": "Enter path",
@@ -108,7 +114,45 @@
     "noItems": "No items found. Add library paths to scan for media.",
     "noLibraries": "No library configured yet",
     "loadingMediaFiles": "Loading media files...",
-    "loadFailed": "Failed to load media files. Please try again."
+    "loadFailed": "Failed to load media files. Please try again.",
+    "noRows": "No rows available. Configure playlists to display content."
+  },
+  "recommendationRows": {
+    "title": "Recommendation Rows",
+    "add": "Add Row",
+    "edit": "Edit Row",
+    "recentlyAdded": "Recently Added",
+    "recentlyAddedIn": "Recently Added in {library_name}",
+    "library": "Library",
+    "libraryHelp": "Select which library this recommendation row belongs to",
+    "name": "Row Name",
+    "namePlaceholder": "Recently Added in %LIBRARY_NAME%",
+    "nameHelp": "Name for this recommendation row. Use %LIBRARY_NAME% as a placeholder to include the library name",
+    "nameTemplateHint": "Example: \"Recently Added in %LIBRARY_NAME%\" will show as \"Recently Added in Films\"",
+    "previewLabel": "Preview - Users will see:",
+    "previewHelp": "This is how the row name will appear to users on the homepage and library pages",
+    "visibleOnHomepage": "Visible on Homepage",
+    "visibleOnRecommend": "Visible in Recommended",
+    "filterCriteria": "Filter Criteria",
+    "filterCriteriaPlaceholder": "{\n  \"order_by\": \"scanned_at\",\n  \"order\": \"DESC\",\n  \"limit\": 20\n}",
+    "filterCriteriaHelp": "JSON format: order_by, order (ASC/DESC), limit, offset, where (array of filters)",
+    "filterCriteriaCannotChange": "Filter criteria cannot be changed for special recommendation rows",
+    "libraryCannotChange": "Library cannot be changed after creation",
+    "special": "Special (cannot be deleted)",
+    "specialRowInfo": "This is a special recommendation row. Filter criteria and library cannot be modified.",
+    "noRows": "No recommendation rows configured",
+    "loadFailed": "Failed to load recommendation rows",
+    "saveFailed": "Failed to save recommendation row",
+    "updateFailed": "Failed to update recommendation row",
+    "deleteFailed": "Failed to delete recommendation row",
+    "confirmDelete": "Are you sure you want to delete this recommendation row?",
+    "cannotDelete": "Cannot delete special recommendation rows",
+    "cannotDeleteSpecial": "Special recommendation rows cannot be deleted",
+    "invalidJson": "Invalid JSON format"
+  },
+  "library": {
+    "recommended": "Recommended",
+    "allItems": "All Items"
   },
   "jobs": {
     "title": "Scheduled Jobs",
