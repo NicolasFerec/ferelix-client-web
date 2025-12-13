@@ -54,7 +54,28 @@
     "updateSuccess": "Settings updated successfully",
     "updateFailed": "Failed to update settings. Please try again.",
     "passwordMismatch": "Passwords do not match",
-    "leaveEmpty": "Leave empty to keep current password"
+    "leaveEmpty": "Leave empty to keep current password",
+    "loadError": "Failed to load settings",
+    "saveError": "Failed to save settings",
+    "saveSuccess": "Settings saved successfully",
+    "saving": "Saving",
+    "libraryScanner": {
+      "title": "Library Scanner",
+      "description": "Configure how often the system automatically scans libraries for new media files.",
+      "interval": "Scan Interval",
+      "minutes": "minutes",
+      "intervalHint": "How often to scan libraries for new or changed files"
+    },
+    "cleanupJob": {
+      "title": "Database Cleanup",
+      "description": "Configure when the system permanently deletes media files marked as deleted.",
+      "schedule": "Schedule Time",
+      "timeFormat": "(24-hour format)",
+      "scheduleHint": "Time of day when the cleanup job runs (24-hour format)",
+      "gracePeriod": "Grace Period",
+      "days": "days",
+      "gracePeriodHint": "Number of days to keep deleted files before permanent deletion"
+    }
   },
   "dashboard": {
     "title": "Dashboard",
@@ -161,7 +182,6 @@
     "scheduled": "Scheduled Jobs",
     "history": "Job History",
     "name": "Name",
-    "type": "Type",
     "typeLabel": "Type",
     "lastRun": "Last Run",
     "nextRun": "Next Run",

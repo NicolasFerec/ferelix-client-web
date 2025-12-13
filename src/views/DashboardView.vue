@@ -57,7 +57,6 @@
                     ? 'bg-indigo-600 text-white'
                     : 'text-gray-300 hover:bg-gray-700 hover:text-white'
                 ]"
-                disabled
               >
                 {{ $t('dashboard.settings') }}
               </button>
@@ -83,6 +82,7 @@
       <main class="flex-1 overflow-y-auto p-8">
         <LibraryList v-if="activeSection === 'libraries'" />
         <JobsPanel v-else-if="activeSection === 'jobs'" />
+        <SettingsPanel v-else-if="activeSection === 'settings'" />
         <About v-else-if="activeSection === 'about'" />
         <div v-else class="text-center text-gray-400 py-12">
           {{ $t('dashboard.comingSoon') }}
@@ -97,6 +97,7 @@ import { ref } from 'vue'
 import MenuBar from '../components/MenuBar.vue'
 import LibraryList from '../components/LibraryList.vue'
 import JobsPanel from '../components/JobsPanel.vue'
+import SettingsPanel from '../components/SettingsPanel.vue'
 import About from '../components/About.vue'
 
 const activeSection = ref('libraries')

@@ -451,6 +451,23 @@ export const dashboard = {
   },
 };
 
+// Export settings-related functions
+export const settings = {
+  /**
+   * Get application settings (admin only)
+   */
+  async getSettings() {
+    return get('/dashboard/settings');
+  },
+
+  /**
+   * Update application settings (admin only)
+   */
+  async updateSettings(data) {
+    return patch('/dashboard/settings', data);
+  },
+};
+
 // Export recommendation row-related functions
 export const recommendationRows = {
   /**

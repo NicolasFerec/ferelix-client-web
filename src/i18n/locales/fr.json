@@ -54,7 +54,28 @@
     "updateSuccess": "Paramètres mis à jour avec succès",
     "updateFailed": "Échec de la mise à jour des paramètres. Veuillez réessayer.",
     "passwordMismatch": "Les mots de passe ne correspondent pas",
-    "leaveEmpty": "Laisser vide pour conserver le mot de passe actuel"
+    "leaveEmpty": "Laisser vide pour conserver le mot de passe actuel",
+    "loadError": "Échec du chargement des paramètres",
+    "saveError": "Échec de l'enregistrement des paramètres",
+    "saveSuccess": "Paramètres enregistrés avec succès",
+    "saving": "Enregistrement",
+    "libraryScanner": {
+      "title": "Analyseur de bibliothèque",
+      "description": "Configurez la fréquence à laquelle le système analyse automatiquement les bibliothèques pour les nouveaux fichiers multimédias.",
+      "interval": "Intervalle d'analyse",
+      "minutes": "minutes",
+      "intervalHint": "Fréquence d'analyse des bibliothèques pour les fichiers nouveaux ou modifiés"
+    },
+    "cleanupJob": {
+      "title": "Nettoyage de la base de données",
+      "description": "Configurez quand le système supprime définitivement les fichiers multimédias marqués comme supprimés.",
+      "schedule": "Heure d'exécution",
+      "timeFormat": "(format 24 heures)",
+      "scheduleHint": "Heure de la journée à laquelle la tâche de nettoyage s'exécute (format 24 heures)",
+      "gracePeriod": "Période de grâce",
+      "days": "jours",
+      "gracePeriodHint": "Nombre de jours pendant lesquels conserver les fichiers supprimés avant suppression définitive"
+    }
   },
   "dashboard": {
     "title": "Tableau de bord",
@@ -161,7 +182,6 @@
     "scheduled": "Tâches planifiées",
     "history": "Historique des tâches",
     "name": "Nom",
-    "type": "Type",
     "typeLabel": "Type",
     "lastRun": "Dernière exécution",
     "nextRun": "Prochaine exécution",
