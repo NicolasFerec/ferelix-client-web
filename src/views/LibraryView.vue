@@ -2,7 +2,7 @@
   <div class="library-view min-h-screen bg-gray-900">
     <MenuBar />
 
-    <main class="container mx-auto px-6 py-8">
+    <main class="container mx-auto px-6 pt-4 pb-8">
       <div v-if="loading" class="text-center text-gray-400 py-12">
         {{ $t('common.loading') }}
       </div>
@@ -18,8 +18,6 @@
       </div>
       
       <div v-else>
-        <h2 class="text-2xl font-semibold mb-6 text-white">{{ library?.name || $t('library.allItems') }}</h2>
-        
         <!-- Tabs -->
         <div class="border-b border-gray-700 mb-6">
           <nav class="-mb-px flex space-x-8">
@@ -53,7 +51,7 @@
           <div v-if="rows.length === 0" class="text-center text-gray-400 py-12">
             <p>{{ $t('home.noRows') }}</p>
           </div>
-          <div v-else>
+          <div v-else class="-mx-6">
             <MediaRow
               v-for="row in rows"
               :key="`${row.playlist_id}-${row.library_id}`"

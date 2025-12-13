@@ -1,9 +1,33 @@
 <template>
   <header class="bg-gray-900/95 backdrop-blur-sm sticky top-0 z-50 border-b border-gray-800">
     <div class="container mx-auto px-6 py-4 flex justify-between items-center">
-      <router-link to="/" class="text-3xl font-bold text-white hover:text-indigo-400 transition-colors cursor-pointer">
-        {{ $t('common.appName') }}
-      </router-link>
+      <div class="flex items-center space-x-6">
+        <router-link to="/" class="text-3xl font-bold text-white hover:text-indigo-400 transition-colors cursor-pointer">
+          {{ $t('common.appName') }}
+        </router-link>
+        <!-- Homepage link -->
+        <router-link
+          to="/"
+          class="px-3 py-2 text-sm font-medium rounded-md transition-colors"
+          :class="isHomepage 
+            ? 'text-white bg-indigo-600 hover:bg-indigo-700' 
+            : 'text-gray-300 hover:text-white hover:bg-gray-800'"
+        >
+          {{ $t('common.homepage') }}
+        </router-link>
+        <!-- Library links -->
+        <router-link
+          v-for="library in libraries"
+          :key="library.id"
+          :to="`/library/${library.id}`"
+          class="px-3 py-2 text-sm font-medium rounded-md transition-colors"
+          :class="isActiveLibrary(library.id) 
+            ? 'text-white bg-indigo-600 hover:bg-indigo-700' 
+            : 'text-gray-300 hover:text-white hover:bg-gray-800'"
+        >
+          {{ library.name }}
+        </router-link>
+      </div>
       <div class="flex items-center space-x-4">
         <!-- Dashboard button (admin only) -->
         <router-link
@@ -111,15 +135,34 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
-import { useRouter } from 'vue-router'
-import { auth } from '@/api/client'
+import { ref, onMounted, onUnmounted, computed } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+import { auth, libraries as libraryApi } from '@/api/client'
 import { useUser } from '@/composables/useUser'
 
 const router = useRouter()
+const route = useRoute()
 const { isAdmin, clearUser, loadUser } = useUser()
 const isDropdownOpen = ref(false)
 const dropdownContainer = ref(null)
+const libraries = ref([])
+
+const isHomepage = computed(() => {
+  return route.name === 'home'
+})
+
+function isActiveLibrary(libraryId) {
+  return route.name === 'library' && parseInt(route.params.id) === libraryId
+}
+
+async function loadLibraries() {
+  try {
+    libraries.value = await libraryApi.getLibraries()
+  } catch (err) {
+    console.error('Failed to load libraries:', err)
+    libraries.value = []
+  }
+}
 
 function toggleDropdown() {
   isDropdownOpen.value = !isDropdownOpen.value
@@ -146,8 +189,8 @@ function handleEscape(event) {
 onMounted(async () => {
   document.addEventListener('click', handleClickOutside)
   document.addEventListener('keydown', handleEscape)
-  // Load user data if authenticated but not yet loaded
-  await loadUser()
+  // Load user data and libraries if authenticated but not yet loaded
+  await Promise.all([loadUser(), loadLibraries()])
 })
 
 onUnmounted(() => {
