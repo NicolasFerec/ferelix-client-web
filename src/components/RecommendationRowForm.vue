@@ -14,7 +14,7 @@
               {{ $t('recommendationRows.library') }} <span class="text-red-400">*</span>
             </label>
             <select v-model="form.library_id" required :disabled="!!row || !!libraryId"
-              class="w-full px-3 py-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed">
+              class="w-full px-3 py-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed">
               <option value="">{{ $t('common.select') }}</option>
               <option v-for="lib in libraries" :key="lib.id" :value="lib.id">
                 {{ lib.name }}
@@ -28,7 +28,7 @@
               {{ $t('recommendationRows.name') }} <span class="text-red-400">*</span>
             </label>
             <input v-model="form.name" type="text" required
-              class="w-full px-3 py-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              class="w-full px-3 py-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
               :placeholder="$t('recommendationRows.namePlaceholder')" />
           </div>
 
@@ -46,7 +46,7 @@
               {{ $t('recommendationRows.filterCriteria') }} <span class="text-red-400">*</span>
             </label>
             <textarea v-model="filterCriteriaJson" :disabled="row?.is_special" rows="6"
-              class="w-full px-3 py-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 font-mono text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+              class="w-full px-3 py-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 font-mono text-sm disabled:opacity-50 disabled:cursor-not-allowed"
               :placeholder="$t('recommendationRows.filterCriteriaPlaceholder')"></textarea>
             <p v-if="row?.is_special" class="mt-1 text-xs text-yellow-400">
               {{ $t('recommendationRows.filterCriteriaCannotChange') }}
@@ -63,14 +63,14 @@
           <div class="flex items-center space-x-6">
             <div class="flex items-center">
               <input v-model="form.visible_on_homepage" type="checkbox" id="visible_on_homepage"
-                class="w-4 h-4 text-indigo-600 bg-gray-700 border-gray-600 rounded focus:ring-indigo-500" />
+                class="w-4 h-4 text-primary-600 bg-gray-700 border-gray-600 rounded focus:ring-primary-500" />
               <label for="visible_on_homepage" class="ml-2 text-sm font-medium text-gray-300">
                 {{ $t('recommendationRows.visibleOnHomepage') }}
               </label>
             </div>
             <div class="flex items-center">
               <input v-model="form.visible_on_recommend" type="checkbox" id="visible_on_recommend"
-                class="w-4 h-4 text-indigo-600 bg-gray-700 border-gray-600 rounded focus:ring-indigo-500" />
+                class="w-4 h-4 text-primary-600 bg-gray-700 border-gray-600 rounded focus:ring-primary-500" />
               <label for="visible_on_recommend" class="ml-2 text-sm font-medium text-gray-300">
                 {{ $t('recommendationRows.visibleOnRecommend') }}
               </label>
@@ -97,7 +97,7 @@
             {{ $t('common.cancel') }}
           </button>
           <button type="submit" :disabled="loading || filterCriteriaError"
-            class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-md transition-colors disabled:opacity-50">
+            class="px-4 py-2 text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 rounded-md transition-colors disabled:opacity-50">
             {{ loading ? $t('common.loading') : $t('common.save') }}
           </button>
         </div>

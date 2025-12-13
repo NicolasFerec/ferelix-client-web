@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import MediaDetailView from '../views/MediaDetailView.vue'
+import PlayerView from '../views/PlayerView.vue'
 import LoginView from '../views/LoginView.vue'
 import SetupView from '../views/SetupView.vue'
 import UserSettingsView from '../views/UserSettingsView.vue'
@@ -20,6 +21,12 @@ const router = createRouter({
       path: '/media/:id',
       name: 'media-detail',
       component: MediaDetailView,
+      props: true
+    },
+    {
+      path: '/play/:id',
+      name: 'player',
+      component: PlayerView,
       props: true
     },
     {

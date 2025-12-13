@@ -4,7 +4,7 @@
       <h2 class="text-2xl font-semibold text-white">{{ $t('recommendationRows.title') }}</h2>
       <button
         @click="showForm = true; editingRow = null"
-        class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md transition-colors"
+        class="px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-md transition-colors"
       >
         {{ $t('recommendationRows.add') }}
       </button>
@@ -28,7 +28,7 @@
       <p>{{ error }}</p>
       <button
         @click="loadRows"
-        class="mt-4 px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-md"
+        class="mt-4 px-4 py-2 text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 rounded-md"
       >
         {{ $t('common.retry') }}
       </button>

@@ -14,7 +14,7 @@
       <p>{{ error }}</p>
       <button
         @click="loadAll"
-        class="mt-4 px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-md"
+        class="mt-4 px-4 py-2 text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 rounded-md"
       >
         {{ $t('common.retry') }}
       </button>
@@ -76,7 +76,7 @@
                 <button
                   @click="triggerJob(job.id)"
                   :disabled="triggeringJobs.has(job.id)"
-                  class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded-md transition-colors text-sm"
+                  class="px-4 py-2 bg-primary-600 hover:bg-primary-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded-md transition-colors text-sm"
                 >
                   {{ triggeringJobs.has(job.id) ? $t('jobs.triggering') : $t('jobs.trigger') }}
                 </button>
@@ -144,7 +144,7 @@
                   </div>
                   <div class="w-full bg-gray-700 rounded-full h-2">
                     <div 
-                      class="bg-indigo-600 h-2 rounded-full transition-all duration-300" 
+                      class="bg-primary-600 h-2 rounded-full transition-all duration-300" 
                       :style="{ width: ((record.files_processed || 0) / record.files_total * 100) + '%' }"
                     >
                     </div>

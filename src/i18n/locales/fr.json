@@ -45,7 +45,7 @@
     "error": "Échec de la configuration"
   },
   "settings": {
-    "title": "Paramètres utilisateur",
+    "title": "Paramètres",
     "username": "Nom d'utilisateur",
     "email": "Email",
     "password": "Mot de passe",
@@ -229,6 +229,21 @@
     "commit": "Commit",
     "branch": "Branche",
     "loadFailed": "Échec du chargement des informations de version"
+  },
+  "player": {
+    "audio_tracks": "Audio",
+    "subtitles": "Sous-titres",
+    "subtitle_off": "Désactivé",
+    "fullscreen": "Plein écran",
+    "exit_fullscreen": "Quitter le plein écran",
+    "play": "Lecture",
+    "pause": "Pause",
+    "volume": "Volume",
+    "mute": "Muet",
+    "unmute": "Activer le son",
+    "loading": "Chargement de la vidéo...",
+    "error": "Échec du chargement de la vidéo",
+    "retry": "Réessayer"
   }
 }
 

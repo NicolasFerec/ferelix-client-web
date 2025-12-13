@@ -10,7 +10,7 @@
             :to="`/library/${library.id}`"
             class="px-3 py-1 text-sm font-medium rounded-md transition-colors"
             :class="isActive(library.id) 
-              ? 'text-white bg-indigo-600 hover:bg-indigo-700' 
+              ? 'text-white bg-primary-600 hover:bg-primary-700' 
               : 'text-gray-300 hover:text-white hover:bg-gray-700'"
           >
             {{ library.name }}

@@ -45,7 +45,7 @@
     "error": "Setup failed"
   },
   "settings": {
-    "title": "User Settings",
+    "title": "Settings",
     "username": "Username",
     "email": "Email",
     "password": "Password",
@@ -229,6 +229,21 @@
     "commit": "Commit",
     "branch": "Branch",
     "loadFailed": "Failed to load version information"
+  },
+  "player": {
+    "audio_tracks": "Audio",
+    "subtitles": "Subtitles",
+    "subtitle_off": "Off",
+    "fullscreen": "Fullscreen",
+    "exit_fullscreen": "Exit Fullscreen",
+    "play": "Play",
+    "pause": "Pause",
+    "volume": "Volume",
+    "mute": "Mute",
+    "unmute": "Unmute",
+    "loading": "Loading video...",
+    "error": "Failed to load video",
+    "retry": "Retry"
   }
 }
 

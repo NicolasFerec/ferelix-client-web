@@ -56,7 +56,7 @@
         </button>
         <button
           @click="handleManageRecommendations"
-          class="px-3 py-1 text-xs font-medium text-indigo-300 bg-indigo-900/50 hover:bg-indigo-900/70 rounded-md transition-colors"
+          class="px-3 py-1 text-xs font-medium text-primary-300 bg-primary-900/50 hover:bg-primary-900/70 rounded-md transition-colors"
         >
           {{ $t('libraries.manageRecommendations') }}
         </button>
@@ -111,7 +111,7 @@
                     :checked="row.visible_on_homepage"
                     @change="handleToggleVisibility(row, 'homepage', $event.target.checked)"
                     :disabled="updatingVisibility === row.id"
-                    class="w-4 h-4 text-indigo-600 bg-gray-700 border-gray-600 rounded focus:ring-indigo-500 disabled:opacity-50"
+                    class="w-4 h-4 text-primary-600 bg-gray-700 border-gray-600 rounded focus:ring-primary-500 disabled:opacity-50"
                   />
                 </div>
                 <div class="col-span-3 flex justify-center">
@@ -120,7 +120,7 @@
                     :checked="row.visible_on_recommend"
                     @change="handleToggleVisibility(row, 'recommend', $event.target.checked)"
                     :disabled="updatingVisibility === row.id"
-                    class="w-4 h-4 text-indigo-600 bg-gray-700 border-gray-600 rounded focus:ring-indigo-500 disabled:opacity-50"
+                    class="w-4 h-4 text-primary-600 bg-gray-700 border-gray-600 rounded focus:ring-primary-500 disabled:opacity-50"
                   />
                 </div>
                 <div class="col-span-1 flex justify-end gap-2">
@@ -150,7 +150,7 @@
           <div class="px-4 py-3 bg-gray-700 border-t border-gray-600">
             <button
               @click="handleAddRow"
-              class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-md transition-colors"
+              class="px-4 py-2 text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 rounded-md transition-colors"
             >
               {{ $t('recommendationRows.add') }}
             </button>

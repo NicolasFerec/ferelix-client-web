@@ -11,7 +11,7 @@
         <p class="text-red-400 mb-4">{{ error }}</p>
         <button
           @click="loadData"
-          class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-md"
+          class="px-4 py-2 text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 rounded-md"
         >
           {{ $t('common.retry') }}
         </button>
@@ -26,7 +26,7 @@
               :class="[
                 'py-4 px-1 border-b-2 font-medium text-sm transition-colors',
                 activeTab === 'recommended'
-                  ? 'border-indigo-500 text-indigo-400'
+                  ? 'border-primary-500 text-primary-400'
                   : 'border-transparent text-gray-400 hover:text-gray-300 hover:border-gray-300'
               ]"
             >
@@ -37,7 +37,7 @@
               :class="[
                 'py-4 px-1 border-b-2 font-medium text-sm transition-colors',
                 activeTab === 'library'
-                  ? 'border-indigo-500 text-indigo-400'
+                  ? 'border-primary-500 text-primary-400'
                   : 'border-transparent text-gray-400 hover:text-gray-300 hover:border-gray-300'
               ]"
             >

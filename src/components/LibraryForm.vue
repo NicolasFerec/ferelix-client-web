@@ -16,7 +16,7 @@
               v-model="form.name"
               type="text"
               required
-              class="w-full px-3 py-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              class="w-full px-3 py-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
               placeholder="My Library"
             />
           </div>
@@ -31,7 +31,7 @@
                 v-model="form.path"
                 type="text"
                 required
-                class="flex-1 px-3 py-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                class="flex-1 px-3 py-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
                 placeholder="/path/to/library"
               />
               <button
@@ -52,7 +52,7 @@
             </label>
             <select
               v-model="form.library_type"
-              class="w-full px-3 py-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              class="w-full px-3 py-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
             >
               <option value="movie">{{ $t('libraries.type.movie') }}</option>
               <option value="tv_show">{{ $t('libraries.type.tv_show') }}</option>
@@ -65,7 +65,7 @@
               v-model="form.enabled"
               type="checkbox"
               id="enabled"
-              class="w-4 h-4 text-indigo-600 bg-gray-700 border-gray-600 rounded focus:ring-indigo-500"
+              class="w-4 h-4 text-primary-600 bg-gray-700 border-gray-600 rounded focus:ring-primary-500"
             />
             <label for="enabled" class="ml-2 text-sm font-medium text-gray-300">
               {{ $t('libraries.enabled') }}
@@ -90,7 +90,7 @@
           <button
             type="submit"
             :disabled="loading"
-            class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-md transition-colors disabled:opacity-50"
+            class="px-4 py-2 text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 rounded-md transition-colors disabled:opacity-50"
           >
             {{ loading ? $t('common.loading') : $t('common.save') }}
           </button>

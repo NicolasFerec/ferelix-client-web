@@ -9,7 +9,7 @@
       <p class="text-red-400 mb-4">{{ error }}</p>
       <button
         @click="loadMedia"
-        class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-md"
+        class="px-4 py-2 text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 rounded-md"
       >
         Retry
       </button>
@@ -101,32 +101,6 @@
           </div>
         </div>
 
-        <!-- Video Player Section -->
-        <div v-if="showPlayer && mediaFile.id" class="mt-8">
-          <div class="bg-black rounded-lg overflow-hidden">
-            <VideoPlayer 
-              :key="mediaFile.id" 
-              :movie-id="mediaFile.id"
-              @format-error="handleFormatError"
-            />
-          </div>
-          <div v-if="formatError" class="mt-4 p-4 bg-yellow-900/50 border border-yellow-700 rounded-lg">
-            <p class="text-yellow-200 font-semibold mb-2">Video Format Not Supported</p>
-            <p class="text-yellow-300 text-sm">
-              The browser's native video player does not support {{ formatError?.contentType || 'this video format' }}. 
-              Only MP4, WebM, and OGG formats are supported natively.
-            </p>
-            <p v-if="mediaFile" class="text-yellow-300 text-sm mt-2">
-              Your file is: {{ mediaFile.file_extension.toUpperCase() }} ({{ formatError?.contentType }})
-            </p>
-            <p class="text-yellow-300 text-sm mt-2">
-              Consider transcoding the video to MP4 format for browser compatibility.
-            </p>
-          </div>
-        </div>
-        <div v-else-if="showPlayer && !mediaFile.id" class="mt-8 p-8 bg-gray-800 rounded-lg text-center text-gray-400">
-          <p>No media file associated.</p>
-        </div>
       </div>
     </div>
 
@@ -143,16 +117,13 @@
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import MenuBar from '../components/MenuBar.vue'
-import VideoPlayer from '../components/VideoPlayer.vue'
 import { media } from '@/api/client'
 
 const route = useRoute()
 const router = useRouter()
-const showPlayer = ref(false)
 const mediaFile = ref(null)
 const loading = ref(false)
 const error = ref('')
-const formatError = ref(null)
 
 async function loadMedia() {
   loading.value = true
@@ -207,12 +178,9 @@ function formatFileSize(bytes) {
 }
 
 function handlePlayClick() {
-  formatError.value = null // Reset error when starting playback
-  showPlayer.value = true
-}
-
-function handleFormatError(errorData) {
-  formatError.value = errorData
+  if (mediaFile.value?.id) {
+    router.push({ name: 'player', params: { id: mediaFile.value.id } })
+  }
 }
 
 function getMediaTitle() {

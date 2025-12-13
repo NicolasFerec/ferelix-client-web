@@ -2,7 +2,7 @@
   <header class="bg-gray-900/95 backdrop-blur-sm sticky top-0 z-50 border-b border-gray-800">
     <div class="container mx-auto px-6 py-4 flex justify-between items-center">
       <div class="flex items-center space-x-6">
-        <router-link to="/" class="text-3xl font-bold text-white hover:text-indigo-400 transition-colors cursor-pointer">
+        <router-link to="/" class="text-3xl font-bold text-white hover:text-primary-400 transition-colors cursor-pointer">
           {{ $t('common.appName') }}
         </router-link>
         <!-- Homepage link -->
@@ -10,7 +10,7 @@
           to="/"
           class="px-3 py-2 text-sm font-medium rounded-md transition-colors"
           :class="isHomepage 
-            ? 'text-white bg-indigo-600 hover:bg-indigo-700' 
+            ? 'text-white bg-primary-600 hover:bg-primary-700' 
             : 'text-gray-300 hover:text-white hover:bg-gray-800'"
         >
           {{ $t('common.homepage') }}
@@ -22,7 +22,7 @@
           :to="`/library/${library.id}`"
           class="px-3 py-2 text-sm font-medium rounded-md transition-colors"
           :class="isActiveLibrary(library.id) 
-            ? 'text-white bg-indigo-600 hover:bg-indigo-700' 
+            ? 'text-white bg-primary-600 hover:bg-primary-700' 
             : 'text-gray-300 hover:text-white hover:bg-gray-800'"
         >
           {{ library.name }}
@@ -33,14 +33,14 @@
         <router-link
           v-if="isAdmin"
           to="/dashboard"
-          class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-md transition-colors"
+          class="px-4 py-2 text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 rounded-md transition-colors"
         >
           {{ $t('common.dashboard') }}
         </router-link>
         <div class="relative" ref="dropdownContainer">
         <button
           @click="toggleDropdown"
-          class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-700 hover:bg-gray-600 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 focus:ring-indigo-500"
+          class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-700 hover:bg-gray-600 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 focus:ring-primary-500"
           :aria-expanded="isDropdownOpen"
           aria-label="User menu"
         >

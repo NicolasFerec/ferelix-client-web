@@ -11,7 +11,7 @@
         <p class="text-red-400 mb-4">{{ error }}</p>
         <button
           @click="loadRows"
-          class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-md"
+          class="px-4 py-2 text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 rounded-md"
         >
           {{ $t('common.retry') }}
         </button>

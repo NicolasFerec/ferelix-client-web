@@ -14,7 +14,7 @@
       <p>{{ loadError }}</p>
       <button
         @click="loadSettings"
-        class="mt-4 px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-md"
+        class="mt-4 px-4 py-2 text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 rounded-md"
       >
         {{ $t('common.retry') }}
       </button>
@@ -41,7 +41,7 @@
                 v-model.number="formData.library_scan_interval_minutes"
                 type="number"
                 min="1"
-                class="flex-1 px-4 py-2 bg-gray-700 text-white rounded-md border border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                class="flex-1 px-4 py-2 bg-gray-700 text-white rounded-md border border-gray-600 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 :disabled="saving"
               />
               <span class="text-gray-400 whitespace-nowrap">
@@ -78,7 +78,7 @@
                 type="number"
                 min="0"
                 max="23"
-                class="w-24 px-4 py-2 bg-gray-700 text-white rounded-md border border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                class="w-24 px-4 py-2 bg-gray-700 text-white rounded-md border border-gray-600 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 placeholder="3"
                 :disabled="saving"
               />
@@ -88,7 +88,7 @@
                 type="number"
                 min="0"
                 max="59"
-                class="w-24 px-4 py-2 bg-gray-700 text-white rounded-md border border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                class="w-24 px-4 py-2 bg-gray-700 text-white rounded-md border border-gray-600 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 placeholder="0"
                 :disabled="saving"
               />
@@ -107,7 +107,7 @@
                 v-model.number="formData.cleanup_grace_period_days"
                 type="number"
                 min="1"
-                class="flex-1 px-4 py-2 bg-gray-700 text-white rounded-md border border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                class="flex-1 px-4 py-2 bg-gray-700 text-white rounded-md border border-gray-600 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                 :disabled="saving"
               />
               <span class="text-gray-400 whitespace-nowrap">
@@ -133,7 +133,7 @@
         <button
           @click="saveSettings"
           :disabled="saving || !hasChanges"
-          class="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded-md transition-colors"
+          class="px-6 py-2 bg-primary-600 hover:bg-primary-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded-md transition-colors"
         >
           {{ saving ? $t('settings.saving') : $t('common.save') }}
         </button>

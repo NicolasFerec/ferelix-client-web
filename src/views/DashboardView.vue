@@ -14,7 +14,7 @@
                 :class="[
                   'w-full text-left px-4 py-2 rounded-md transition-colors',
                   activeSection === 'libraries'
-                    ? 'bg-indigo-600 text-white'
+                    ? 'bg-primary-600 text-white'
                     : 'text-gray-300 hover:bg-gray-700 hover:text-white'
                 ]"
               >
@@ -27,7 +27,7 @@
                 :class="[
                   'w-full text-left px-4 py-2 rounded-md transition-colors',
                   activeSection === 'jobs'
-                    ? 'bg-indigo-600 text-white'
+                    ? 'bg-primary-600 text-white'
                     : 'text-gray-300 hover:bg-gray-700 hover:text-white'
                 ]"
               >
@@ -40,7 +40,7 @@
                 :class="[
                   'w-full text-left px-4 py-2 rounded-md transition-colors',
                   activeSection === 'users'
-                    ? 'bg-indigo-600 text-white'
+                    ? 'bg-primary-600 text-white'
                     : 'text-gray-300 hover:bg-gray-700 hover:text-white'
                 ]"
                 disabled
@@ -54,7 +54,7 @@
                 :class="[
                   'w-full text-left px-4 py-2 rounded-md transition-colors',
                   activeSection === 'settings'
-                    ? 'bg-indigo-600 text-white'
+                    ? 'bg-primary-600 text-white'
                     : 'text-gray-300 hover:bg-gray-700 hover:text-white'
                 ]"
               >
@@ -67,7 +67,7 @@
                 :class="[
                   'w-full text-left px-4 py-2 rounded-md transition-colors',
                   activeSection === 'about'
-                    ? 'bg-indigo-600 text-white'
+                    ? 'bg-primary-600 text-white'
                     : 'text-gray-300 hover:bg-gray-700 hover:text-white'
                 ]"
               >
